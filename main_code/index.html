@@ -3,40 +3,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FocusFlow is a study platform that helps students organise tasks, stay focused, and track progress.">
+  <meta
+    name="description"
+    content="FocusFlow helps students organise tasks, stay focused, and track their study progress."
+  >
   <title>FocusFlow</title>
   <link rel="stylesheet" href="css/pages/index.css">
 </head>
 <body>
-  <main class="homepage">
-    <section class="hero">
-      <p class="brand">FocusFlow</p>
-      <h1>Study with focus and purpose.</h1>
-      <p class="description">
-        Organise your tasks, complete focused study sessions, take structured breaks, and monitor your progress.
-      </p>
-      <div class="actions">
-        <button type="button" class="primary-button">Get Started</button>
-        <button type="button" class="secondary-button">Learn More</button>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img
+          class="logo"
+          src="images/logo.png"
+          alt="FocusFlow logo"
+        >
+
+        <div class="brand-text">
+          <h1>FocusFlow</h1>
+          <p>Study smarter</p>
+        </div>
       </div>
-    </section>
 
-    <section class="features" aria-label="FocusFlow features">
-      <article class="feature">
-        <h2>Plan</h2>
-        <p>Organise study tasks and keep track of important work.</p>
-      </article>
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="navigation-link active" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 10.5 12 4l8 6.5V20H4v-9.5Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M9 20v-6h6v6"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          <span>Home</span>
+        </a>
 
-      <article class="feature">
-        <h2>Focus</h2>
-        <p>Use structured study sessions and planned break timers.</p>
-      </article>
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 5h12M6 12h12M6 19h12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <circle cx="3" cy="5" r="1" fill="currentColor" />
+            <circle cx="3" cy="12" r="1" fill="currentColor" />
+            <circle cx="3" cy="19" r="1" fill="currentColor" />
+          </svg>
+          <span>Tasks</span>
+        </a>
 
-      <article class="feature">
-        <h2>Progress</h2>
-        <p>Review completed tasks and monitor study habits over time.</p>
-      </article>
-    </section>
-  </main>
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="13"
+              r="8"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 13V8M9 3h6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Focus Session</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 4h10v3a5 5 0 0 1-10 0V4Z"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 12v4M8 20h8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Break Timer</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5 19V9M12 19V5M19 19v-7"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Progress</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="user-card">
+        <div class="avatar">HQ</div>
+
+        <div class="user-details">
+          <p class="user-name">Huan Qi</p>
+          <p class="user-role">Student</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="homepage">
+      <section class="hero">
+        <p class="eyebrow">Welcome to FocusFlow</p>
+
+        <h2>Study with focus and purpose.</h2>
+
+        <p class="description">
+          Organise your tasks, complete focused study sessions, take structured
+          breaks, and monitor your progress.
+        </p>
+
+        <div class="actions">
+          <button class="primary-button" type="button">
+            Get Started
+          </button>
+
+          <button class="secondary-button" type="button">
+            Learn More
+          </button>
+        </div>
+      </section>
+
+      <section class="features" aria-label="FocusFlow features">
+        <article class="feature">
+          <h3>Plan</h3>
+          <p>
+            Organise study tasks and keep track of important work.
+          </p>
+        </article>
+
+        <article class="feature">
+          <h3>Focus</h3>
+          <p>
+            Use structured study sessions and planned breaks.
+          </p>
+        </article>
+
+        <article class="feature">
+          <h3>Progress</h3>
+          <p>
+            Review completed tasks and monitor study habits.
+          </p>
+        </article>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

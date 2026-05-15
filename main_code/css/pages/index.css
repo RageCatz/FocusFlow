@@ -2,45 +2,161 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
-  min-height: 100vh;
-  background: #f5f7fc;
-  color: #1f2937;
-  font-family: Arial, sans-serif;
+  min-height: 100%;
+}
+
+body {
+  background: #f5f7fb;
+  color: #1f2a44;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 button {
   font: inherit;
 }
 
+.app-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 18px 16px;
+  border-right: 1px solid #dce4f4;
+  background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px 18px;
+  border-bottom: 1px solid #dce4f4;
+}
+
+.logo {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  object-fit: contain;
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.brand-text p {
+  margin: 4px 0 0;
+  color: #6c7898;
+  font-size: 12px;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.navigation-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 14px;
+  color: #33405f;
+  font-weight: 700;
+  transition: background 0.18s ease;
+}
+
+.navigation-link:hover {
+  background: #eef3ff;
+}
+
+.navigation-link.active {
+  background: #dfe7ff;
+  color: #4254b7;
+}
+
+.navigation-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #dce4f4;
+  border-radius: 16px;
+  background: #f7faff;
+}
+
+.avatar {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffdca8, #8ab7ff);
+  font-weight: 700;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: 800;
+}
+
+.user-role {
+  margin: 3px 0 0;
+  color: #6c7898;
+  font-size: 12px;
+}
+
 .homepage {
-  width: min(100% - 40px, 1000px);
+  width: min(100% - 48px, 1000px);
   margin: 0 auto;
-  padding: 80px 0;
+  padding: 72px 0;
 }
 
 .hero {
   max-width: 700px;
-  margin: 0 auto 60px;
-  text-align: center;
+  margin-bottom: 52px;
 }
 
-.brand {
-  margin: 0 0 16px;
+.eyebrow {
+  margin: 0 0 14px;
   color: #6675f5;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
 }
 
-h1 {
+.hero h2 {
   margin: 0 0 20px;
   font-size: 48px;
   line-height: 1.15;
 }
 
 .description {
-  margin: 0 auto 28px;
+  margin: 0 0 28px;
   color: #6b7280;
   font-size: 18px;
   line-height: 1.6;
@@ -48,7 +164,6 @@ h1 {
 
 .actions {
   display: flex;
-  justify-content: center;
   gap: 12px;
 }
 
@@ -66,14 +181,14 @@ h1 {
   color: #ffffff;
 }
 
+.primary-button:hover {
+  background: #5362d9;
+}
+
 .secondary-button {
   border: 1px solid #d8ddea;
   background: #ffffff;
   color: #1f2937;
-}
-
-.primary-button:hover {
-  background: #5362d9;
 }
 
 .secondary-button:hover {
@@ -93,7 +208,7 @@ h1 {
   background: #ffffff;
 }
 
-.feature h2 {
+.feature h3 {
   margin: 0 0 10px;
   font-size: 21px;
 }
@@ -104,27 +219,48 @@ h1 {
   line-height: 1.5;
 }
 
-@media (max-width: 700px) {
-  .homepage {
-    padding: 50px 0;
+@media (max-width: 850px) {
+  .app-layout {
+    grid-template-columns: 76px 1fr;
   }
 
-  h1 {
+  .sidebar {
+    padding: 18px 10px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding: 8px 0 18px;
+  }
+
+  .brand-text,
+  .navigation-link span,
+  .user-details {
+    display: none;
+  }
+
+  .navigation-link {
+    justify-content: center;
+    padding: 13px;
+  }
+
+  .user-card {
+    justify-content: center;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 650px) {
+  .homepage {
+    width: min(100% - 28px, 520px);
+    padding: 44px 0;
+  }
+
+  .hero h2 {
     font-size: 38px;
   }
 
   .features {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 450px) {
-  .actions {
-    flex-direction: column;
-  }
-
-  .primary-button,
-  .secondary-button {
-    width: 100%;
   }
 }
