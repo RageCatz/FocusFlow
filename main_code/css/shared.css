@@ -31,8 +31,29 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input,
+select,
+textarea {
   font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(102, 117, 245, 0.25);
+  outline-offset: 3px;
 }
 
 .app-layout {
@@ -42,10 +63,13 @@ button {
 }
 
 .sidebar {
+  position: sticky;
+  top: 0;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   padding: 18px 16px;
+  overflow-y: auto;
+  flex-direction: column;
   border-right: 1px solid var(--border);
   background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
 }
@@ -92,7 +116,9 @@ button {
   border-radius: 14px;
   color: #33405f;
   font-weight: 700;
-  transition: background 0.18s ease;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .navigation-link:hover {
