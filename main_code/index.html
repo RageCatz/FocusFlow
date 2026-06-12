@@ -243,10 +243,15 @@
         <article class="card tasks-card">
           <div class="card-header">
             <h3>Today's Tasks</h3>
-            <a class="text-link" href="#">View all</a>
+
+            <button class="text-link" id="viewAllTasksButton" type="button">
+              View all
+            </button>
           </div>
 
-          <div class="empty-state">
+          <div class="task-list" id="todayTaskList"></div>
+
+          <div class="empty-state" id="taskEmptyState">
             <div class="empty-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <rect
@@ -271,7 +276,9 @@
             <p>Your scheduled tasks will appear here.</p>
           </div>
 
-          <button class="add-task-button" type="button">+ Add Task</button>
+          <button class="add-task-button" id="addTaskButton" type="button">
+            + Add Task
+          </button>
         </article>
 
         <div class="side-cards">
@@ -279,14 +286,27 @@
             <h3>Start a Focus Session</h3>
             <p>Stay focused. You've got this!</p>
 
-            <button class="focus-button" type="button">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M8 5v14l11-7z"></path>
-              </svg>
-              <span>Start 25-Minute Session</span>
-            </button>
+            <div class="focus-timer" id="focusTimer">25:00</div>
 
-            <p class="card-detail">
+            <div class="focus-controls">
+              <button class="focus-button" id="startFocusButton" type="button">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z"></path>
+                </svg>
+                <span>Start 25-Minute Session</span>
+              </button>
+
+              <button
+                class="secondary-focus-button"
+                id="resetFocusButton"
+                type="button"
+                hidden
+              >
+                Reset
+              </button>
+            </div>
+
+            <p class="card-detail" id="focusStatus">
               A quick focus block is the easiest way to make progress without
               overthinking where to start.
             </p>
@@ -297,12 +317,12 @@
 
             <div class="streak-value">
               <span aria-hidden="true">🔥</span>
-              <strong>0 days</strong>
+              <strong id="studyStreak">0 days</strong>
             </div>
 
             <p>Keep it up!</p>
 
-            <p class="card-detail">
+            <p class="card-detail" id="streakMessage">
               Complete one focused session today to begin your streak.
             </p>
           </article>
@@ -333,7 +353,7 @@
             </div>
 
             <div>
-              <strong>0 min</strong>
+              <strong id="focusMinutesToday">0 min</strong>
               <span>Focus time today</span>
             </div>
           </article>
@@ -360,7 +380,7 @@
             </div>
 
             <div>
-              <strong>0/0</strong>
+              <strong id="taskProgress">0/0</strong>
               <span>Tasks done</span>
             </div>
           </article>
@@ -386,7 +406,7 @@
             </div>
 
             <div>
-              <strong>0/60 min</strong>
+              <strong id="dailyGoalProgress">0/60 min</strong>
               <span>Daily goal</span>
             </div>
           </article>
@@ -400,6 +420,78 @@
     </main>
   </div>
 
+  <div class="modal-backdrop" id="taskModal" hidden>
+    <section
+      class="task-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="taskModalTitle"
+    >
+      <div class="modal-header">
+        <h3 id="taskModalTitle">Add Task</h3>
+
+        <button
+          class="modal-close"
+          id="closeTaskModal"
+          type="button"
+          aria-label="Close task form"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="taskForm">
+        <div class="modal-field">
+          <label for="taskName">Task name</label>
+
+          <input
+            id="taskName"
+            name="taskName"
+            type="text"
+            placeholder="Enter a study task"
+            maxlength="80"
+          >
+
+          <p class="modal-error" id="taskNameError"></p>
+        </div>
+
+        <div class="modal-field">
+          <label for="taskDueDate">Due date</label>
+          <input id="taskDueDate" name="taskDueDate" type="date">
+        </div>
+
+        <button class="primary-button modal-submit" type="submit">
+          Save Task
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="allTasksModal" hidden>
+    <section
+      class="task-modal all-tasks-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="allTasksTitle"
+    >
+      <div class="modal-header">
+        <h3 id="allTasksTitle">All Tasks</h3>
+
+        <button
+          class="modal-close"
+          id="closeAllTasksModal"
+          type="button"
+          aria-label="Close task list"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="all-task-list" id="allTaskList"></div>
+    </section>
+  </div>
+
   <script src="js/common.js"></script>
+  <script src="js/pages/index.js"></script>
 </body>
 </html>
