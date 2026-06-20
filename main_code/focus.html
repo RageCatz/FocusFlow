@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Complete structured study sessions with the FocusFlow focus timer."
+  >
+  <title>Focus Session | FocusFlow</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/pages/focus.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo" src="images/logo.png" alt="FocusFlow logo">
+
+        <div class="brand-text">
+          <h1>FocusFlow</h1>
+          <p>Study smarter, feel better</p>
+        </div>
+      </div>
+
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M3 12 12 4l9 8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 10v10h14V10M9 20v-6h6v6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect
+              x="5"
+              y="4"
+              width="14"
+              height="16"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M9 9h6M9 13h6M9 17h4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Tasks</span>
+        </a>
+
+        <a class="navigation-link active" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="13"
+              r="7"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 2v4M12 13l4-3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Focus Session</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="6"
+              cy="8"
+              r="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="18"
+              cy="8"
+              r="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M4 20v-3a4 4 0 0 1 8 0v3M12 17a4 4 0 0 1 8 0v3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Breaks</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 19V5M9 19v-7M14 19V9M19 19V3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Progress</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="user-card">
+        <div class="avatar">HQ</div>
+
+        <div class="user-details">
+          <p class="user-name">Huan Qi</p>
+          <p class="user-role">Year 12 • New Zealand</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="focus-main">
+      <header class="page-header">
+        <div>
+          <h2>Focus Session</h2>
+          <p>Time to focus. Distractions can wait.</p>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10 20a2 2 0 0 0 4 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="notification-dot"></span>
+          </button>
+
+          <button class="icon-button" type="button" aria-label="Quick settings">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+
+          <button class="icon-button" type="button" aria-label="Profile">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M4 20a8 8 0 0 1 16 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="card timer-setup-card">
+        <div class="timer-setup-header">
+          <div class="timer-setup-icon">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="13"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 2v4M12 13l4-3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <h3>Study timer setup</h3>
+            <p>Choose a task and set how long you want to focus.</p>
+          </div>
+        </div>
+
+        <div class="timer-setup-grid">
+          <div class="field">
+            <label for="focusTask">Task for this session</label>
+            <select id="focusTask">
+              <option>Select a task</option>
+              <option selected>Mathematics homework</option>
+              <option>Science revision</option>
+              <option>English reading</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="focusDuration">Focus duration</label>
+
+            <div class="duration-control">
+              <div class="duration-input">
+                <input id="focusDuration" type="number" value="25">
+                <span>minutes</span>
+              </div>
+
+              <button class="secondary-button" type="button">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-presets">
+          <span>Quick durations</span>
+          <button type="button">15 min</button>
+          <button class="active" type="button">25 min</button>
+          <button type="button">40 min</button>
+          <button type="button">60 min</button>
+        </div>
+      </section>
+
+      <section class="timer-layout">
+        <article class="card timer-card">
+          <div class="session-label">Focus session</div>
+
+          <div class="timer-ring">
+            <svg viewBox="0 0 280 280" aria-hidden="true">
+              <circle class="ring-background" cx="140" cy="140" r="116"></circle>
+              <circle class="ring-progress" cx="140" cy="140" r="116"></circle>
+            </svg>
+
+            <div class="timer-content">
+              <span class="timer-time">25:00</span>
+              <span class="timer-status">Ready to focus</span>
+            </div>
+          </div>
+
+          <div class="selected-task">
+            <span>Current task</span>
+            <strong>Mathematics homework</strong>
+          </div>
+
+          <div class="timer-actions">
+            <button class="primary-action" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+              <span>Start</span>
+            </button>
+
+            <button class="secondary-action" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M7 5h4v14H7zM13 5h4v14h-4z"></path>
+              </svg>
+              <span>Pause</span>
+            </button>
+
+            <button class="secondary-action" type="button">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M4 12a8 8 0 1 0 2.3-5.7L4 8"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M4 4v4h4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <button class="finish-task-button" type="button">
+            Mark Selected Task as Complete
+          </button>
+        </article>
+
+        <aside class="session-sidebar">
+          <section class="side-card">
+            <p class="side-label">Session progress</p>
+
+            <div class="session-progress">
+              <strong>Session 1 of 4</strong>
+              <span>3 breaks remaining</span>
+            </div>
+
+            <div class="progress-track">
+              <span></span>
+            </div>
+          </section>
+
+          <section class="side-card">
+            <p class="side-label">Focus tips</p>
+
+            <ul class="tip-list">
+              <li>Put your phone out of reach.</li>
+              <li>Keep only the materials you need nearby.</li>
+              <li>Use the break timer when the session ends.</li>
+            </ul>
+          </section>
+
+          <section class="side-card">
+            <p class="side-label">Current settings</p>
+
+            <dl class="settings-list">
+              <div>
+                <dt>Duration</dt>
+                <dd>25 mins</dd>
+              </div>
+
+              <div>
+                <dt>Focus mode</dt>
+                <dd>On</dd>
+              </div>
+
+              <div>
+                <dt>Dark mode</dt>
+                <dd>Off</dd>
+              </div>
+
+              <div>
+                <dt>Auto breaks</dt>
+                <dd>On</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
+      </section>
+
+      <section class="card camera-card">
+        <div class="camera-copy">
+          <div class="camera-heading">
+            <h3>Camera focus monitoring</h3>
+            <span class="camera-badge">Not started</span>
+          </div>
+
+          <p>
+            FocusFlow can check whether you remain near the study area during
+            your session. Camera monitoring will run locally in your browser.
+          </p>
+
+          <button class="secondary-action camera-button" type="button">
+            Enable Camera
+          </button>
+        </div>
+
+        <div class="camera-preview" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M4 7h3l2-2h6l2 2h3v12H4V7Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+            <circle
+              cx="12"
+              cy="13"
+              r="4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          <span>Camera preview</span>
+        </div>
+      </section>
+
+      <section class="card ambient-card">
+        <div>
+          <h3>Ambient sound</h3>
+          <p>Choose background audio to support your focus session.</p>
+        </div>
+
+        <div class="ambient-controls">
+          <select aria-label="Ambient sound">
+            <option>Off</option>
+            <option>Rain</option>
+            <option>Forest</option>
+            <option>White noise</option>
+          </select>
+
+          <button class="secondary-action" type="button">Stop Sound</button>
+        </div>
+      </section>
+
+      <footer class="focus-footer">
+        <span>© 2026 FocusFlow</span>
+        <span>Stay present. Make progress.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
