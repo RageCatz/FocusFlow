@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Review focus sessions, study habits, achievements, and progress with FocusFlow."
+  >
+  <title>Progress & Insights | FocusFlow</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/pages/progress.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo" src="images/logo.png" alt="FocusFlow logo">
+
+        <div class="brand-text">
+          <h1>FocusFlow</h1>
+          <p>Study smarter, feel better</p>
+        </div>
+      </div>
+
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M3 12 12 4l9 8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 10v10h14V10M9 20v-6h6v6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect
+              x="5"
+              y="4"
+              width="14"
+              height="16"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M9 9h6M9 13h6M9 17h4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Tasks</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="13"
+              r="7"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 2v4M12 13l4-3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Focus Session</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 4h10v3a5 5 0 0 1-10 0V4Z"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 12v4M8 20h8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Breaks</span>
+        </a>
+
+        <a class="navigation-link active" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 19V5M9 19v-7M14 19V9M19 19V3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Progress</span>
+        </a>
+
+        <a class="navigation-link" href="#">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="user-card">
+        <div class="avatar">HQ</div>
+
+        <div class="user-details">
+          <p class="user-name">Huan Qi</p>
+          <p class="user-role">Year 12 • New Zealand</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="progress-main">
+      <header class="page-header">
+        <div>
+          <h2>Progress & Insights</h2>
+          <p>Review your focus, habits, achievements, and study trends.</p>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10 20a2 2 0 0 0 4 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="notification-dot"></span>
+          </button>
+
+          <button class="icon-button" type="button" aria-label="Quick settings">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+
+          <button class="icon-button" type="button" aria-label="Profile">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M4 20a8 8 0 0 1 16 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="progress-page-actions">
+        <span class="xp-pill">0 XP</span>
+        <button class="secondary-button" type="button">Print / Save PDF</button>
+        <button class="secondary-button" type="button">
+          Reset Today's Progress
+        </button>
+      </div>
+
+      <section class="progress-grid" aria-label="Progress summary">
+        <article class="stat-card">
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="13"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 2v4M12 13l4-3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div class="stat-copy">
+            <span>Sessions</span>
+            <strong>0</strong>
+            <small>Today</small>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 12a6 6 0 1 0 12 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M12 3v9l4 2"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div class="stat-copy">
+            <span>Focused</span>
+            <strong>0</strong>
+            <small>Minutes today</small>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M8 12l2.5 2.5L16 9"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div class="stat-copy">
+            <span>Focus score</span>
+            <strong>100%</strong>
+            <small>Attention checks</small>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect
+                x="5"
+                y="4"
+                width="14"
+                height="16"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M9 9h6M9 13h6M9 17h4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div class="stat-copy">
+            <span>Tasks</span>
+            <strong>0</strong>
+            <small>Completed</small>
+          </div>
+        </article>
+      </section>
+
+      <section class="content-grid two-columns">
+        <article class="card">
+          <div class="card-heading">
+            <h3>Today's focus goal</h3>
+            <p>0 of 60 minutes</p>
+          </div>
+
+          <div class="goal-bar">
+            <span></span>
+          </div>
+
+          <div class="progress-control-row">
+            <div class="field">
+              <label for="dailyGoal">Daily goal</label>
+
+              <div class="progress-input-wrap">
+                <input id="dailyGoal" type="number" value="60">
+                <span>min</span>
+              </div>
+            </div>
+
+            <button class="primary-action" type="button">Save Goal</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <h3>Smart study tip</h3>
+            <p>Start with one small task to build momentum.</p>
+          </div>
+
+          <div class="summary-list">
+            <div>
+              <span>Tab switches</span>
+              <strong>0</strong>
+            </div>
+
+            <div>
+              <span>Distraction checks</span>
+              <strong>0</strong>
+            </div>
+
+            <div>
+              <span>Total focus time</span>
+              <strong>0 min</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="card weekly-card">
+        <div class="card-heading">
+          <h3>Weekly analytics</h3>
+          <p>Focused minutes for the last seven days.</p>
+        </div>
+
+        <div class="weekly-bars">
+          <div class="weekly-day">
+            <strong>0</strong>
+            <div class="weekly-track">
+              <span style="height: 4%;"></span>
+            </div>
+            <small>Thu</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>18</strong>
+            <div class="weekly-track">
+              <span style="height: 36%;"></span>
+            </div>
+            <small>Fri</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>35</strong>
+            <div class="weekly-track">
+              <span style="height: 70%;"></span>
+            </div>
+            <small>Sat</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>20</strong>
+            <div class="weekly-track">
+              <span style="height: 40%;"></span>
+            </div>
+            <small>Sun</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>45</strong>
+            <div class="weekly-track">
+              <span style="height: 90%;"></span>
+            </div>
+            <small>Mon</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>25</strong>
+            <div class="weekly-track">
+              <span style="height: 50%;"></span>
+            </div>
+            <small>Tue</small>
+          </div>
+
+          <div class="weekly-day">
+            <strong>0</strong>
+            <div class="weekly-track">
+              <span style="height: 4%;"></span>
+            </div>
+            <small>Wed</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-grid two-columns">
+        <article class="card">
+          <div class="card-heading">
+            <h3>Achievement badges</h3>
+            <p>Complete study goals to unlock new achievements.</p>
+          </div>
+
+          <div class="achievement-grid">
+            <article class="achievement unlocked">
+              <div class="achievement-icon">🔥</div>
+              <strong>First Session</strong>
+              <span>Complete your first focus session.</span>
+            </article>
+
+            <article class="achievement">
+              <div class="achievement-icon">⭐</div>
+              <strong>Focused Student</strong>
+              <span>Reach 60 focused minutes.</span>
+            </article>
+
+            <article class="achievement">
+              <div class="achievement-icon">📚</div>
+              <strong>Task Master</strong>
+              <span>Complete five study tasks.</span>
+            </article>
+
+            <article class="achievement">
+              <div class="achievement-icon">🏆</div>
+              <strong>Seven-Day Streak</strong>
+              <span>Study for seven days in a row.</span>
+            </article>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <h3>Study calendar</h3>
+            <p>Green days contain recorded study time.</p>
+          </div>
+
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+            <span>Sun</span>
+          </div>
+
+          <div class="calendar-grid">
+            <span class="calendar-day muted-day">27</span>
+            <span class="calendar-day muted-day">28</span>
+            <span class="calendar-day muted-day">29</span>
+            <span class="calendar-day muted-day">30</span>
+            <span class="calendar-day">1</span>
+            <span class="calendar-day studied">2</span>
+            <span class="calendar-day">3</span>
+            <span class="calendar-day">4</span>
+            <span class="calendar-day studied">5</span>
+            <span class="calendar-day">6</span>
+            <span class="calendar-day">7</span>
+            <span class="calendar-day studied">8</span>
+            <span class="calendar-day">9</span>
+            <span class="calendar-day">10</span>
+            <span class="calendar-day">11</span>
+            <span class="calendar-day studied">12</span>
+            <span class="calendar-day">13</span>
+            <span class="calendar-day">14</span>
+            <span class="calendar-day">15</span>
+            <span class="calendar-day">16</span>
+            <span class="calendar-day studied">17</span>
+            <span class="calendar-day">18</span>
+            <span class="calendar-day">19</span>
+            <span class="calendar-day">20</span>
+            <span class="calendar-day">21</span>
+            <span class="calendar-day">22</span>
+            <span class="calendar-day">23</span>
+            <span class="calendar-day">24</span>
+            <span class="calendar-day">25</span>
+            <span class="calendar-day">26</span>
+            <span class="calendar-day">27</span>
+            <span class="calendar-day">28</span>
+            <span class="calendar-day">29</span>
+            <span class="calendar-day">30</span>
+            <span class="calendar-day">31</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="card report-card">
+        <div class="report-header">
+          <div>
+            <h3>Parent / teacher report</h3>
+            <p>
+              A printable summary without camera images or biometric data.
+            </p>
+          </div>
+
+          <button class="primary-action" type="button">Print Report</button>
+        </div>
+
+        <div class="summary-list">
+          <div>
+            <span>Student</span>
+            <strong>Huan Qi</strong>
+          </div>
+
+          <div>
+            <span>Total sessions</span>
+            <strong>0</strong>
+          </div>
+
+          <div>
+            <span>Current streak</span>
+            <strong>0 days</strong>
+          </div>
+
+          <div>
+            <span>Overall task completion</span>
+            <strong>0%</strong>
+          </div>
+
+          <div>
+            <span>Current focus score</span>
+            <strong>100%</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="install-banner">
+        <div>
+          <strong>Install FocusFlow</strong>
+          <p>Use it like an app from your home screen.</p>
+        </div>
+
+        <button class="primary-action" type="button">Install</button>
+      </section>
+
+      <footer class="progress-footer">
+        <span>© 2026 FocusFlow</span>
+        <span>Track progress. Build better habits.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
