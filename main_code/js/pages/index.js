@@ -209,7 +209,7 @@ function renderDashboard() {
 }
 
 function wireEvents() {
-  dashboardHeader = FocusFlowShared.connectDashboardHeader({
+  dashboardHeader = FocusFlowShared.connectPageChrome({
     getTasks: () => dashboardData.tasks,
     getSettings: () => dashboardData.settings,
     setSettings: nextSettings => {

@@ -2,7 +2,6 @@
    Tasks page layout and page-specific components
    Shared shell styles come from css/shared.css.
 ===================================================== */
-
 :root {
   --tasks-shadow: 0 6px 18px rgba(44, 65, 120, 0.05);
   --tasks-radius: 22px;
@@ -15,74 +14,6 @@
   background: var(--background);
 }
 
-.sidebar {
-  gap: 14px;
-  padding: 18px 16px;
-  border-right: 1px solid var(--border);
-  background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
-}
-
-.brand {
-  gap: 12px;
-  padding: 10px 8px 16px;
-}
-
-.logo {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-}
-
-.brand-text h1 {
-  font-size: 22px;
-  line-height: 1.1;
-}
-
-.brand-text p {
-  margin-top: 4px;
-  font-size: 13px;
-}
-
-.navigation {
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.navigation-link {
-  gap: 12px;
-  padding: 14px;
-  border-radius: 16px;
-  color: #33405f;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease;
-}
-
-.navigation-link:hover {
-  background: #eef3ff;
-}
-
-.navigation-link.active {
-  background: #dfe7ff;
-  color: #33405f;
-}
-
-.navigation-link svg {
-  width: 20px;
-  height: 20px;
-}
-
-.user-card {
-  padding: 14px;
-  border-radius: 18px;
-  background: #f7faff;
-}
-
-.avatar {
-  width: 42px;
-  height: 42px;
-}
-
 .tasks-main {
   height: 100vh;
   padding: 22px 28px 28px;
@@ -93,7 +24,6 @@
 /* =====================================================
    Header
 ===================================================== */
-
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -114,12 +44,6 @@
   margin: 8px 0 0;
   color: var(--text-secondary);
   font-size: 18px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .icon-button {
@@ -160,7 +84,6 @@
 /* =====================================================
    Cards and fields
 ===================================================== */
-
 .card {
   padding: 20px;
   border: 1px solid var(--border);
@@ -271,7 +194,6 @@
 /* =====================================================
    Filters and add-task area
 ===================================================== */
-
 .task-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -310,11 +232,7 @@
 
 .task-entry-grid {
   display: grid;
-  grid-template-columns:
-    minmax(230px, 1.7fr)
-    minmax(170px, 0.8fr)
-    minmax(140px, 0.65fr)
-    auto;
+  grid-template-columns: minmax(230px, 1.7fr) minmax(170px, 0.8fr) minmax(140px, 0.65fr) auto;
   gap: 12px;
   align-items: end;
 }
@@ -342,7 +260,6 @@
 /* =====================================================
    Task table
 ===================================================== */
-
 .table-wrapper {
   overflow-x: auto;
   border-radius: 18px;
@@ -526,7 +443,6 @@
 /* =====================================================
    Delete confirmation modal
 ===================================================== */
-
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -592,7 +508,6 @@
 /* =====================================================
    Footer
 ===================================================== */
-
 .tasks-footer {
   display: flex;
   justify-content: space-between;
@@ -607,7 +522,6 @@
 /* =====================================================
    Dark mode
 ===================================================== */
-
 :root[data-theme="dark"] .sidebar {
   background: linear-gradient(180deg, #182133 0%, #151d2c 100%);
 }
@@ -683,7 +597,6 @@
 /* =====================================================
    Responsive layout
 ===================================================== */
-
 @media (max-width: 1100px) {
   .planner-grid,
   .task-entry-grid {
@@ -694,13 +607,10 @@
   .task-entry-grid .primary-action {
     width: 100%;
   }
+
 }
 
 @media (max-width: 850px) {
-  .app-layout {
-    grid-template-columns: 76px 1fr;
-  }
-
   .tasks-main {
     padding: 20px;
   }
@@ -714,18 +624,10 @@
   .page-header h2 {
     font-size: 38px;
   }
+
 }
 
 @media (max-width: 680px) {
-  .page-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .header-actions {
-    justify-content: flex-end;
-  }
-
   .planner-grid,
   .task-entry-grid {
     grid-template-columns: 1fr;
@@ -749,6 +651,7 @@
   .tasks-footer {
     flex-direction: column;
   }
+
 }
 
 @media (max-width: 520px) {
@@ -775,8 +678,8 @@
   .delete-modal-actions button {
     width: 100%;
   }
-}
 
+}
 
 /* Dashboard-aligned sidebar and quick-settings overrides. */
 .navigation-link {
@@ -784,16 +687,6 @@
   padding: 14px 18px;
   border-radius: 22px;
   font-size: 18px;
-}
-
-.navigation-link.active {
-  background: #dce4ff;
-  color: #263b69;
-}
-
-.navigation-link svg {
-  width: 23px;
-  height: 23px;
 }
 
 .tasks-settings-wrapper {
@@ -954,12 +847,12 @@ body.focus-mode .tasks-main > .tasks-footer {
   .tasks-switch.on::after {
     transform: translateX(30px);
   }
+
 }
 
 /* =====================================================
    Dashboard parity — Tasks uses Dashboard as source of truth
 ===================================================== */
-
 /* Match the Dashboard sidebar geometry. */
 .navigation-link {
   min-height: 0;
@@ -967,17 +860,6 @@ body.focus-mode .tasks-main > .tasks-footer {
   padding: 14px 14px;
   border-radius: 16px;
   font-size: 16px;
-}
-
-.navigation-link.active {
-  background: #dfe7ff;
-  color: #33405f;
-}
-
-.navigation-link svg {
-  width: 20px;
-  height: 20px;
-  flex: 0 0 20px;
 }
 
 /* Match the Dashboard header-control geometry. */
@@ -1176,4 +1058,5 @@ body.dark-mode .tasks-switch.on {
     transform: none;
     left: 28px;
   }
+
 }

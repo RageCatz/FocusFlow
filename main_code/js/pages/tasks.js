@@ -674,7 +674,6 @@ function connectPageControls() {
   });
 }
 
-
 function applyTaskSettings() {
   FocusFlowShared.applyAppSettings(taskSettings);
   document.getElementById("notifyBtn")?.classList.toggle(
@@ -683,27 +682,20 @@ function applyTaskSettings() {
   );
 }
 
-
-function connectDashboardHeader() {
-  FocusFlowShared.connectDashboardHeader({
-    getTasks: () => taskData.tasks,
-    getSettings: () => taskSettings,
-    setSettings: nextSettings => {
-      taskSettings = { ...taskSettings, ...nextSettings };
-      taskData.settings = { ...taskData.settings, ...taskSettings };
-      FocusFlowShared.writeStorage(TASK_SETTINGS_KEY, taskSettings);
-      saveData();
-    },
-    afterSettingChange: () => {
-      applyTaskSettings();
-    }
-  });
-}
-
 function initialiseTasksPage() {
   FocusFlowShared.fillProfile(taskData.profile);
   applyTaskSettings();
-  connectDashboardHeader();
+  FocusFlowShared.connectPageChrome({
+      getTasks: () => taskData.tasks,
+      getSettings: () => taskSettings,
+      setSettings: nextSettings => {
+        taskSettings = { ...taskSettings, ...nextSettings };
+        taskData.settings = { ...taskData.settings, ...taskSettings };
+        FocusFlowShared.writeStorage(TASK_SETTINGS_KEY, taskSettings);
+        saveData();
+      },
+      afterSettingChange: applyTaskSettings
+    });
 
   const taskDate = document.getElementById("taskDate");
   const plannerDeadline = document.getElementById("plannerDeadline");

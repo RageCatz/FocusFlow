@@ -148,11 +148,10 @@ window.FocusFlowShared = {
   }
 };
 
-
-
 /* =====================================================
-   Shared Dashboard and Tasks application controls
-   Handles settings, notifications, and header popups.
+   Shared application controls
+   Used by Dashboard, Tasks, and Focus for settings, notifications,
+   and consistent header popups.
 ===================================================== */
 FocusFlowShared.SETTINGS_KEY = "focusflowDashboardSettings";
 FocusFlowShared.NOTIFICATIONS_KEY = "focusflowNotifications";
@@ -361,10 +360,16 @@ FocusFlowShared.connectDashboardHeader = function (options = {}) {
   return { controller, renderNotifications };
 };
 
+/*
+ * Shared page chrome for Dashboard, Tasks, and Focus.
+ * This is the common entry point for notifications, Quick Settings,
+ * profile/logout controls, and shared toggle behaviour.
+ */
+FocusFlowShared.connectPageChrome = FocusFlowShared.connectDashboardHeader;
 
 /* =====================================================
-   Legacy header helper (currently inactive)
-   Kept for the unfinished Focus, Break, Progress, and Settings pages.
+   Legacy shared header helper.
+   Retained for compatibility with older shared header markup.
 ===================================================== */
 function initialiseSharedHeader() {
   const notificationButton = document.querySelector("[data-notification-button]");
@@ -573,3 +578,29 @@ function initialiseSharedHeader() {
   applyTheme(savedTheme === "dark" ? "dark" : "light");
   renderNotifications();
 }
+
+/* =====================================================
+   Persistent Focus session navigation bridge
+   When a FocusFlow page is displayed inside the live Focus shell, clicking
+   "Focus Session" returns to the original camera/timer page instead of loading
+   a second copy of focus.html inside the embedded frame.
+===================================================== */
+function connectPersistentFocusReturnBridge() {
+  if (window.parent === window) return;
+
+  document.addEventListener("click", event => {
+    const link = event.target.closest?.('a[href]');
+    if (!link) return;
+
+    const href = link.getAttribute("href") || "";
+    if (href !== "focus.html" && !href.endsWith("/focus.html")) return;
+
+    event.preventDefault();
+    window.parent.postMessage(
+      { type: "focusflow:return-to-live-focus" },
+      "*"
+    );
+  });
+}
+
+document.addEventListener("DOMContentLoaded", connectPersistentFocusReturnBridge);
