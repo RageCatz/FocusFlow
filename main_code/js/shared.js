@@ -604,3 +604,73 @@ function connectPersistentFocusReturnBridge() {
 }
 
 document.addEventListener("DOMContentLoaded", connectPersistentFocusReturnBridge);
+
+
+/* =====================================================
+   Shared active Break timer tab title
+===================================================== */
+FocusFlowShared.BREAK_STATE_KEY = "focusflowActiveBreakSession";
+
+FocusFlowShared.formatSharedTimer = function (seconds) {
+  const safeSeconds = Math.max(0, Math.ceil(Number(seconds) || 0));
+  const minutes = Math.floor(safeSeconds / 60);
+  const remaining = safeSeconds % 60;
+
+  return `${String(minutes).padStart(2, "0")}:${String(remaining).padStart(2, "0")}`;
+};
+
+FocusFlowShared.getActiveBreakRemainingSeconds = function () {
+  const state = this.readStorage(this.BREAK_STATE_KEY, null);
+  if (!state) return null;
+
+  if (state.timerRunning && state.timerEndAt) {
+    return Math.max(0, Math.ceil((Number(state.timerEndAt) - Date.now()) / 1000));
+  }
+
+  if (
+    Number.isFinite(Number(state.remainingSeconds)) &&
+    Number(state.remainingSeconds) >= 0 &&
+    Number(state.remainingSeconds) < Number(state.totalSeconds || Infinity)
+  ) {
+    return Math.max(0, Math.ceil(Number(state.remainingSeconds)));
+  }
+
+  return null;
+};
+
+FocusFlowShared.startGlobalBreakTitle = function () {
+  const originalTitle = document.title;
+  let intervalId = null;
+
+  const update = () => {
+    const remaining = this.getActiveBreakRemainingSeconds();
+
+    if (remaining === null) {
+      if (document.title.match(/^\d{2,}:\d{2} \| FocusFlow$/)) {
+        document.title = originalTitle;
+      }
+      return;
+    }
+
+    document.title = `${this.formatSharedTimer(remaining)} | FocusFlow`;
+  };
+
+  update();
+  intervalId = window.setInterval(update, 500);
+
+  window.addEventListener("storage", event => {
+    if (event.key === this.BREAK_STATE_KEY) update();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") update();
+  });
+
+  return () => {
+    if (intervalId) window.clearInterval(intervalId);
+  };
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  FocusFlowShared.startGlobalBreakTitle();
+});

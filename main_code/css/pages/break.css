@@ -1,7 +1,8 @@
 .break-main {
   height: 100vh;
-  padding: 30px 28px 28px;
+  padding: 22px 28px 28px;
   overflow-y: auto;
+  background: var(--background);
 }
 
 .page-header {
@@ -22,45 +23,6 @@
   margin: 8px 0 0;
   color: var(--text-secondary);
   font-size: 18px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.icon-button {
-  position: relative;
-  display: grid;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: 0 8px 18px rgba(33, 51, 95, 0.06);
-  cursor: pointer;
-}
-
-.icon-button svg {
-  width: 22px;
-  height: 22px;
-}
-
-.icon-button:hover {
-  background: var(--surface-soft);
-}
-
-.notification-dot {
-  position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-  background: #ffad57;
 }
 
 .card {
@@ -209,6 +171,7 @@
 .break-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(270px, 0.55fr);
+  align-items: start;
   gap: 16px;
   margin-top: 16px;
 }
@@ -216,6 +179,7 @@
 .timer-card {
   display: flex;
   align-items: center;
+  align-self: start;
   flex-direction: column;
   text-align: center;
 }
@@ -346,11 +310,11 @@
 .break-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .side-card {
-  padding: 20px;
+  padding: 14px;
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--surface);
@@ -368,15 +332,15 @@
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 6px;
 }
 
 .activity-option {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 12px;
+  padding: 9px 10px;
   border: 1px solid var(--border);
   border-radius: 15px;
   background: var(--surface-soft);
@@ -451,7 +415,7 @@
 .reminder-text {
   margin: 0;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.45;
 }
 
 .wellbeing-card {
@@ -534,6 +498,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
 }
 
 @media (max-width: 800px) {
@@ -556,6 +521,7 @@
   .wellbeing-grid {
     grid-template-columns: 1fr;
   }
+
 }
 
 @media (max-width: 650px) {
@@ -564,10 +530,6 @@
   .sound-card {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .header-actions {
-    align-self: flex-end;
   }
 
   .break-options {
@@ -596,4 +558,184 @@
   .break-footer {
     flex-direction: column;
   }
+
+}
+
+/* Break completion alarm. */
+.break-alarm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(7px);
+}
+
+.break-alarm-backdrop[hidden] {
+  display: none;
+}
+
+.break-alarm-modal {
+  width: min(460px, 100%);
+  padding: 34px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+  text-align: center;
+}
+
+.break-alarm-icon {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e9f8f0;
+  color: #287a4e;
+  font-size: 34px;
+  font-weight: 900;
+  animation: break-alarm-pulse 1.1s ease-in-out infinite;
+}
+
+.break-alarm-label {
+  color: #287a4e;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.break-alarm-modal h3 {
+  margin: 8px 0 10px;
+  font-size: 34px;
+}
+
+.break-alarm-modal p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.break-alarm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+@keyframes break-alarm-pulse {
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+body.dark-mode .break-alarm-modal {
+  background: #151b2f;
+  border-color: #2b3553;
+}
+
+body.dark-mode .break-alarm-icon {
+  background: #19372a;
+  color: #73d5a6;
+}
+
+@media (max-width: 520px) {
+  .break-alarm-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* Break page dark mode contrast fixes. */
+body.dark-mode .break-setup-card,
+body.dark-mode .card,
+body.dark-mode .side-card,
+body.dark-mode .wellbeing-item,
+body.dark-mode .activity-option,
+body.dark-mode .break-option {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+body.dark-mode .break-option:hover {
+  background: #202b3d;
+  border-color: #5aa57e;
+}
+
+body.dark-mode .break-option.active {
+  background: #1f3a30;
+  border-color: #5bc991;
+  color: #f4fff9;
+  box-shadow: 0 0 0 3px rgba(91, 201, 145, 0.16);
+}
+
+body.dark-mode .break-option strong,
+body.dark-mode .break-option.active strong {
+  color: #f4fff9;
+}
+
+body.dark-mode .break-option span,
+body.dark-mode .break-option.active span,
+body.dark-mode .setup-heading p,
+body.dark-mode .wellbeing-card p,
+body.dark-mode .sound-card p,
+body.dark-mode .timer-message,
+body.dark-mode .reminder-text,
+body.dark-mode .activity-option small,
+body.dark-mode .progress-details span {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .field label,
+body.dark-mode .timer-label,
+body.dark-mode .side-label {
+  color: #aebbd8;
+}
+
+body.dark-mode .duration-input input,
+body.dark-mode .sound-controls select {
+  background: #151d2c;
+  color: var(--text);
+  border-color: #34415f;
+}
+
+body.dark-mode .duration-input span {
+  color: #9faccc;
+}
+
+body.dark-mode .activity-option.active {
+  background: #202f47;
+  border-color: #6070e8;
+}
+
+body.dark-mode .progress-details > div {
+  background: #151d2c;
+  border-color: #34415f;
+}
+
+body.dark-mode .progress-track {
+  background: #26324b;
+}
+
+body.dark-mode .return-button,
+body.dark-mode .secondary-action {
+  background: #202941;
+  color: #dbe6ff;
+  border-color: #394765;
+}
+
+body.dark-mode .return-button:hover,
+body.dark-mode .secondary-action:hover {
+  background: #28344f;
+}
+
+body.dark-mode .ring-background {
+  stroke: #26324b;
 }
