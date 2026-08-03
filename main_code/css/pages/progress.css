@@ -1,14 +1,10 @@
+/* Progress page layout. */
+
 .progress-main {
   height: 100vh;
-  padding: 30px 28px 28px;
+  padding: 22px 28px 28px;
   overflow-y: auto;
-}
-
-.page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
+  background: var(--background);
 }
 
 .page-header h2 {
@@ -23,51 +19,12 @@
   font-size: 18px;
 }
 
-.header-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.icon-button {
-  position: relative;
-  display: grid;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: 0 8px 18px rgba(33, 51, 95, 0.06);
-  cursor: pointer;
-}
-
-.icon-button:hover {
-  background: var(--surface-soft);
-}
-
-.icon-button svg {
-  width: 22px;
-  height: 22px;
-}
-
-.notification-dot {
-  position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-  background: #ffad57;
-}
-
 .progress-page-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  margin: 20px 0 18px;
+  margin: 0 0 18px;
   flex-wrap: wrap;
 }
 
@@ -76,6 +33,7 @@
   align-items: center;
   justify-content: center;
   min-height: 44px;
+  margin-right: auto;
   padding: 0 16px;
   border: 1px solid #f1d39f;
   border-radius: 14px;
@@ -117,6 +75,11 @@
   background: var(--primary-dark);
 }
 
+.danger-outline {
+  color: #b64d4d;
+  border-color: #efcccc;
+}
+
 .progress-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -127,6 +90,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -138,14 +102,10 @@
   display: grid;
   width: 50px;
   height: 50px;
-  flex-shrink: 0;
+  flex: 0 0 50px;
   place-items: center;
   border-radius: 16px;
-}
-
-.stat-icon svg {
-  width: 24px;
-  height: 24px;
+  font-size: 23px;
 }
 
 .stat-icon.purple {
@@ -166,6 +126,10 @@
 .stat-icon.orange {
   background: #fff0dc;
   color: #c5842e;
+}
+
+.stat-copy {
+  min-width: 0;
 }
 
 .stat-copy span,
@@ -190,7 +154,7 @@
 }
 
 .card {
-  padding: 24px;
+  padding: 22px;
   border: 1px solid var(--border);
   border-radius: 22px;
   background: var(--surface);
@@ -210,19 +174,36 @@
 .card-heading h3,
 .report-header h3 {
   margin: 0;
-  font-size: 21px;
+  font-size: 22px;
 }
 
 .card-heading p,
 .report-header p {
   margin: 6px 0 0;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+}
+
+.goal-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.goal-overview strong {
+  font-size: 18px;
+}
+
+.goal-overview span {
+  color: var(--text-secondary);
+  font-weight: 800;
 }
 
 .goal-bar {
   height: 12px;
-  margin-top: 20px;
+  margin-top: 12px;
   overflow: hidden;
   border-radius: 999px;
   background: #e8ecf6;
@@ -230,10 +211,11 @@
 
 .goal-bar span {
   display: block;
-  width: 12%;
+  width: 0;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #6f80ff, #8b9aff);
+  transition: width 0.25s ease;
 }
 
 .progress-control-row {
@@ -269,6 +251,11 @@
   background: var(--surface);
   color: var(--text);
   font-weight: 800;
+}
+
+.progress-input-wrap input:focus {
+  border-color: var(--primary);
+  outline: 3px solid rgba(102, 117, 245, 0.14);
 }
 
 .progress-input-wrap span {
@@ -347,6 +334,7 @@
   min-height: 5px;
   border-radius: 10px;
   background: linear-gradient(180deg, #8d9aff, #6675f5);
+  transition: height 0.25s ease;
 }
 
 .weekly-day small {
@@ -429,8 +417,13 @@
   color: #287a4e;
 }
 
+.calendar-day.today {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
 .calendar-day.muted-day {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .report-card {
@@ -444,27 +437,6 @@
   gap: 20px;
 }
 
-.install-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin-top: 16px;
-  padding: 20px 22px;
-  border: 1px solid #ccd7f3;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #edf2ff, #effaf6);
-}
-
-.install-banner strong {
-  display: block;
-  font-size: 18px;
-}
-
-.install-banner p {
-  margin: 5px 0 0;
-  color: var(--text-secondary);
-}
 
 .progress-footer {
   display: flex;
@@ -475,6 +447,55 @@
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 13px;
+}
+
+/* Progress page dark mode. */
+
+body.dark-mode .stat-card,
+body.dark-mode .card,
+body.dark-mode .achievement,
+body.dark-mode .calendar-day {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+body.dark-mode .achievement.unlocked {
+  background: #3a3020;
+  border-color: #8a6b35;
+}
+
+body.dark-mode .goal-bar,
+body.dark-mode .weekly-track {
+  background: #26324b;
+}
+
+body.dark-mode .progress-input-wrap input {
+  background: #151d2c;
+  color: var(--text);
+  border-color: #34415f;
+}
+
+body.dark-mode .field label {
+  color: #aebbd8;
+}
+
+body.dark-mode .calendar-day.studied {
+  background: #19372a;
+  border-color: #438d68;
+  color: #8ee0b6;
+}
+
+
+body.dark-mode .xp-pill {
+  background: #3a3020;
+  border-color: #72572f;
+  color: #f0c77e;
+}
+
+body.dark-mode .danger-outline {
+  color: #f0a1a1;
+  border-color: #704040;
 }
 
 @media (max-width: 1050px) {
@@ -521,6 +542,7 @@
 
   .xp-pill {
     grid-column: 1 / -1;
+    margin-right: 0;
   }
 
   .progress-page-actions button {
@@ -528,15 +550,13 @@
   }
 
   .progress-control-row,
-  .report-header,
-  .install-banner {
+  .report-header {
     align-items: stretch;
     flex-direction: column;
   }
 
   .progress-control-row .primary-action,
-  .report-header .primary-action,
-  .install-banner .primary-action {
+  .report-header .primary-action {
     width: 100%;
   }
 }
@@ -562,5 +582,134 @@
 
   .progress-footer {
     flex-direction: column;
+  }
+}
+
+@media print {
+  .sidebar,
+  .header-actions,
+  .progress-page-actions {
+    display: none !important;
+  }
+
+  .app-layout {
+    display: block !important;
+  }
+
+  .progress-main {
+    height: auto;
+    padding: 0;
+    overflow: visible;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+}
+
+
+/* Progress reset confirmation modal. */
+.reset-progress-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2600;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(6px);
+}
+
+.reset-progress-backdrop[hidden] {
+  display: none;
+}
+
+.reset-progress-modal {
+  width: min(480px, 100%);
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.26);
+  text-align: center;
+}
+
+.reset-progress-icon {
+  display: grid;
+  width: 66px;
+  height: 66px;
+  margin: 0 auto 16px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff1f1;
+  color: #c95858;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.reset-progress-label {
+  color: #c95858;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.reset-progress-modal h3 {
+  margin: 8px 0 10px;
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.reset-progress-modal p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.reset-progress-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.reset-progress-actions button {
+  width: 100%;
+  min-height: 48px;
+}
+
+.danger-reset-button {
+  border: 1px solid #d97070;
+  border-radius: 14px;
+  background: #cf5d5d;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.danger-reset-button:hover {
+  background: #b94e4e;
+}
+
+body.dark-mode .reset-progress-modal {
+  background: #151b2f;
+  border-color: #2b3553;
+}
+
+body.dark-mode .reset-progress-icon {
+  background: #3a2328;
+  color: #f29a9a;
+}
+
+body.dark-mode .danger-reset-button {
+  background: #a94f56;
+  border-color: #c76b72;
+}
+
+@media (max-width: 520px) {
+  .reset-progress-actions {
+    grid-template-columns: 1fr;
   }
 }

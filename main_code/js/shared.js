@@ -148,6 +148,199 @@ window.FocusFlowShared = {
   }
 };
 
+
+
+/* =====================================================
+   Local account password security
+   Passwords are stored as PBKDF2 hashes, never as plain text.
+===================================================== */
+FocusFlowShared.AUTH_ACCOUNT_KEY = "focusflowLocalAccount";
+FocusFlowShared.AUTH_ITERATIONS = 120000;
+
+FocusFlowShared.bytesToBase64 = function (bytes) {
+  let binary = "";
+
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return btoa(binary);
+};
+
+FocusFlowShared.base64ToBytes = function (value) {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return bytes;
+};
+
+FocusFlowShared.requirePasswordCrypto = function () {
+  if (!window.crypto?.subtle || !window.crypto?.getRandomValues) {
+    throw new Error(
+      "Secure password storage is not available in this browser context."
+    );
+  }
+};
+
+FocusFlowShared.derivePasswordHash = async function (
+  password,
+  saltBase64,
+  iterations = this.AUTH_ITERATIONS
+) {
+  this.requirePasswordCrypto();
+
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      hash: "SHA-256",
+      salt: this.base64ToBytes(saltBase64),
+      iterations
+    },
+    keyMaterial,
+    256
+  );
+
+  return this.bytesToBase64(new Uint8Array(bits));
+};
+
+FocusFlowShared.createLocalAccount = async function ({
+  username,
+  password,
+  profile = {}
+}) {
+  this.requirePasswordCrypto();
+
+  const normalizedUsername = String(username || "").trim().toLowerCase();
+  if (!normalizedUsername) throw new Error("Username is required.");
+
+  const salt = new Uint8Array(16);
+  crypto.getRandomValues(salt);
+
+  const saltBase64 = this.bytesToBase64(salt);
+  const passwordHash = await this.derivePasswordHash(
+    password,
+    saltBase64,
+    this.AUTH_ITERATIONS
+  );
+
+  const account = {
+    username: normalizedUsername,
+    displayUsername: String(username).trim(),
+    salt: saltBase64,
+    passwordHash,
+    iterations: this.AUTH_ITERATIONS,
+    profile: {
+      ...profile,
+      username: String(username).trim()
+    },
+    updatedAt: new Date().toISOString()
+  };
+
+  this.writeStorage(this.AUTH_ACCOUNT_KEY, account);
+  return account;
+};
+
+FocusFlowShared.getLocalAccount = function () {
+  return this.readStorage(this.AUTH_ACCOUNT_KEY, null);
+};
+
+FocusFlowShared.verifyLocalPassword = async function (username, password) {
+  const account = this.getLocalAccount();
+  if (!account?.passwordHash || !account?.salt) return false;
+
+  const normalizedUsername = String(username || "").trim().toLowerCase();
+  if (normalizedUsername !== account.username) return false;
+
+  const hash = await this.derivePasswordHash(
+    password,
+    account.salt,
+    Number(account.iterations || this.AUTH_ITERATIONS)
+  );
+
+  return hash === account.passwordHash;
+};
+
+FocusFlowShared.changeLocalPassword = async function (
+  currentPassword,
+  newPassword
+) {
+  const account = this.getLocalAccount();
+
+  if (!account?.passwordHash || !account?.salt) {
+    return {
+      ok: false,
+      reason: "no-account"
+    };
+  }
+
+  const verified = await this.verifyLocalPassword(
+    account.displayUsername || account.username,
+    currentPassword
+  );
+
+  if (!verified) {
+    return {
+      ok: false,
+      reason: "incorrect-password"
+    };
+  }
+
+  const salt = new Uint8Array(16);
+  crypto.getRandomValues(salt);
+
+  const saltBase64 = this.bytesToBase64(salt);
+  const passwordHash = await this.derivePasswordHash(
+    newPassword,
+    saltBase64,
+    this.AUTH_ITERATIONS
+  );
+
+  this.writeStorage(this.AUTH_ACCOUNT_KEY, {
+    ...account,
+    salt: saltBase64,
+    passwordHash,
+    iterations: this.AUTH_ITERATIONS,
+    updatedAt: new Date().toISOString()
+  });
+
+  return { ok: true };
+};
+
+FocusFlowShared.updateLocalAccountUsername = function (username, profile = {}) {
+  const account = this.getLocalAccount();
+  if (!account) return;
+
+  const displayUsername = String(username || "").trim();
+  if (!displayUsername) return;
+
+  this.writeStorage(this.AUTH_ACCOUNT_KEY, {
+    ...account,
+    username: displayUsername.toLowerCase(),
+    displayUsername,
+    profile: {
+      ...(account.profile || {}),
+      ...profile,
+      username: displayUsername
+    },
+    updatedAt: new Date().toISOString()
+  });
+
+  sessionStorage.setItem("focusflow_username", displayUsername);
+};
+
 /* =====================================================
    Shared application controls
    Used by Dashboard, Tasks, and Focus for settings, notifications,
@@ -187,6 +380,13 @@ FocusFlowShared.applyAppSettings = function (settings) {
 };
 
 FocusFlowShared.buildTaskNotifications = function (tasks = []) {
+  const currentSettings = {
+    ...this.DEFAULT_SETTINGS,
+    ...this.readStorage(this.SETTINGS_KEY, {})
+  };
+
+  if (currentSettings.notifications === false) return [];
+
   const saved = this.readStorage(this.NOTIFICATIONS_KEY, []);
   const readIds = new Set(
     saved.filter(item => item.read).map(item => String(item.id))
@@ -211,29 +411,31 @@ FocusFlowShared.buildTaskNotifications = function (tasks = []) {
     read: readIds.has("welcome")
   }];
 
-  tasks.forEach(task => {
-    if (task.status === "done" || !task.dueDate) return;
+  if (currentSettings.taskDeadlineAlerts !== false) {
+    tasks.forEach(task => {
+      if (task.status === "done" || !task.dueDate) return;
 
-    if (task.dueDate < today) {
-      const id = `overdue-${task.id}-${today}`;
-      notifications.push({
-        id,
-        title: "Overdue task",
-        text: `${task.name} was due ${this.formatStudyDate(task.dueDate)}.`,
-        read: readIds.has(id)
-      });
-    }
+      if (task.dueDate < today) {
+        const id = `overdue-${task.id}-${today}`;
+        notifications.push({
+          id,
+          title: "Overdue task",
+          text: `${task.name} was due ${this.formatStudyDate(task.dueDate)}.`,
+          read: readIds.has(id)
+        });
+      }
 
-    if (task.dueDate === tomorrow) {
-      const id = `upcoming-${task.id}-${today}`;
-      notifications.push({
-        id,
-        title: "Task due tomorrow",
-        text: `${task.name} is due tomorrow.`,
-        read: readIds.has(id)
-      });
-    }
-  });
+      if (task.dueDate === tomorrow) {
+        const id = `upcoming-${task.id}-${today}`;
+        notifications.push({
+          id,
+          title: "Task due tomorrow",
+          text: `${task.name} is due tomorrow.`,
+          read: readIds.has(id)
+        });
+      }
+    });
+  }
 
   this.writeStorage(this.NOTIFICATIONS_KEY, notifications);
   return notifications;
