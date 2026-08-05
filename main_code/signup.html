@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta
     name="description"
-    content="Create a FocusFlow account to organise study tasks, complete focus sessions, and track progress."
+    content="Create a FocusFlow account to organise tasks, focus sessions, and study progress."
   >
   <title>Sign Up | FocusFlow</title>
   <link rel="stylesheet" href="css/shared.css">
@@ -17,171 +17,176 @@
       <section class="signup-hero">
         <a class="signup-brand" href="index.html">
           <img src="images/logo.png" alt="FocusFlow logo">
+
           <div>
             <h1>FocusFlow</h1>
             <p>Study smarter, feel better</p>
           </div>
         </a>
 
-        <h2>Create better study habits.</h2>
+        <h2>Create your study account.</h2>
 
         <p class="hero-description">
-          Create an account to organise your tasks, save focus sessions, and
-          monitor your progress.
+          Start once, stay organised every day. Your tasks, focus sessions,
+          settings, and progress stay ready whenever you come back.
         </p>
 
-        <div class="feature-list">
-          <article class="feature-item">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <rect
-                  x="5"
-                  y="4"
-                  width="14"
-                  height="16"
-                  rx="2"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-                <path
-                  d="M9 9h6M9 13h6M9 17h4"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </div>
-
-            <div>
-              <h3>Organise your workload</h3>
-              <p>Create tasks and keep track of important deadlines.</p>
-            </div>
-          </article>
-
-          <article class="feature-item">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="8"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-                <path
-                  d="M12 8v4l3 2"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </div>
-
-            <div>
-              <h3>Complete focus sessions</h3>
-              <p>Use structured study sessions and planned breaks.</p>
-            </div>
-          </article>
-
-          <article class="feature-item">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M5 19V9M12 19V5M19 19v-7"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </div>
-
-            <div>
-              <h3>Track your progress</h3>
-              <p>Review completed work and maintain a study streak.</p>
-            </div>
-          </article>
-        </div>
+        <article class="saved-card">
+          <h3>What gets saved?</h3>
+          <p>
+            Your dashboard, completed tasks, focus timer settings, break
+            choices, streak, and profile information are saved under your
+            username.
+          </p>
+        </article>
       </section>
 
       <section class="signup-form-section">
-        <div class="form-heading">
+        <header class="signup-heading">
           <h2>Sign up</h2>
-          <p>Create your FocusFlow account.</p>
-        </div>
+          <p>Make your account first, then you can log in any time.</p>
+        </header>
 
-        <form class="signup-form">
-          <div class="form-field">
-            <label for="name">Full name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Enter your full name"
-              autocomplete="name"
-            >
+        <div
+          class="system-message"
+          id="signupMessage"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+        <form class="signup-form" id="signupForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field" id="nameField">
+              <label for="name">Full name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Your name"
+                autocomplete="name"
+                aria-describedby="nameError"
+              >
+              <p class="field-error" id="nameError"></p>
+            </div>
+
+            <div class="form-field" id="usernameField">
+              <label for="username">Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Choose a username"
+                autocomplete="username"
+                aria-describedby="usernameError"
+              >
+              <p class="field-error" id="usernameError"></p>
+            </div>
+
+            <div class="form-field" id="countryField">
+              <label for="country">Country</label>
+              <input
+                id="country"
+                name="country"
+                type="text"
+                value="New Zealand"
+                autocomplete="country-name"
+                aria-describedby="countryError"
+              >
+              <p class="field-error" id="countryError"></p>
+            </div>
+
+            <div class="form-field" id="yearLevelField">
+              <label for="yearLevel">Year level</label>
+              <select
+                id="yearLevel"
+                name="yearLevel"
+                aria-describedby="yearLevelError"
+              >
+                <option value="">Select your year level</option>
+                <option value="Year 9" selected>Year 9</option>
+                <option value="Year 10">Year 10</option>
+                <option value="Year 11">Year 11</option>
+                <option value="Year 12">Year 12</option>
+                <option value="Year 13">Year 13</option>
+              </select>
+              <p class="field-error" id="yearLevelError"></p>
+            </div>
+
+            <div class="form-field full-width" id="industryField">
+              <label for="industry">Industry</label>
+              <select
+                id="industry"
+                name="industry"
+                aria-describedby="industryError"
+              >
+                <option value="">Select your industry</option>
+                <option value="High School Student" selected>
+                  High School Student
+                </option>
+                <option value="University Student">University Student</option>
+                <option value="Working Professional">
+                  Working Professional
+                </option>
+                <option value="Other">Other</option>
+              </select>
+              <p class="field-error" id="industryError"></p>
+            </div>
+
+            <div class="form-field" id="passwordField">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                aria-describedby="passwordError passwordHint"
+              >
+              <p class="field-error" id="passwordError"></p>
+              <p class="inline-status" id="passwordHint"></p>
+            </div>
+
+            <div class="form-field" id="confirmPasswordField">
+              <label for="confirmPassword">Confirm password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm your password"
+                autocomplete="new-password"
+                aria-describedby="confirmPasswordError passwordMatch"
+              >
+              <p class="field-error" id="confirmPasswordError"></p>
+              <p class="inline-status" id="passwordMatch"></p>
+            </div>
           </div>
 
-          <div class="form-field">
-            <label for="username">Username</label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Choose a username"
-              autocomplete="username"
-            >
-          </div>
-
-          <div class="form-field">
-            <label for="email">Email address</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="student@example.com"
-              autocomplete="email"
-            >
-          </div>
-
-          <div class="form-field">
-            <label for="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Create a password"
-              autocomplete="new-password"
-            >
-          </div>
-
-          <div class="form-field">
-            <label for="confirmPassword">Confirm password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Enter your password again"
-              autocomplete="new-password"
-            >
-          </div>
-
-          <label class="checkbox-option">
-            <input type="checkbox" name="showPassword">
+          <label class="show-password-option">
+            <input id="showSignupPasswords" type="checkbox">
             <span>Show passwords</span>
           </label>
 
-          <button class="signup-button" type="submit">
-            <span>Create Account</span>
+          <div class="password-rules">
+            <h3>Password rules</h3>
+            <p>
+              Use at least 6 characters, include at least 1 number, and use
+              letters or numbers only.
+            </p>
+          </div>
+
+          <button class="create-account-button" type="submit">
+            Create Account
           </button>
         </form>
 
         <div class="login-card">
           <h3>Already have an account?</h3>
-          <p>Log in to continue your study progress.</p>
-          <a class="login-button" href="login.html">Go to Log In</a>
+          <a class="login-button" href="login.html">Go to Login</a>
         </div>
       </section>
     </div>
   </main>
+
+  <script src="js/pages/signup.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@
 }
 
 .signup-brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 36px;
@@ -56,47 +56,23 @@
   line-height: 1.7;
 }
 
-.feature-list {
+.saved-card {
   margin-top: 28px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
 }
 
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(112, 134, 196, 0.16);
+.saved-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
 }
 
-.feature-item:last-child {
-  border-bottom: 0;
-}
-
-.feature-icon {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--surface);
-  color: var(--primary);
-}
-
-.feature-icon svg {
-  width: 24px;
-  height: 24px;
-}
-
-.feature-item h3 {
-  margin: 1px 0 5px;
-  font-size: 16px;
-}
-
-.feature-item p {
+.saved-card p {
   margin: 0;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .signup-form-section {
@@ -105,34 +81,74 @@
   padding: 36px;
 }
 
-.form-heading h2 {
+.signup-heading {
+  margin-bottom: 30px;
+}
+
+.signup-heading h2 {
   margin: 0 0 8px;
   font-size: 32px;
 }
 
-.form-heading p {
+.signup-heading p {
   margin: 0;
   color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.system-message {
+  display: none;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.system-message.show {
+  display: block;
+}
+
+.system-message.success {
+  border: 1px solid #9ad7ae;
+  background: #ecf9f0;
+  color: #25643a;
+}
+
+.system-message.error {
+  border: 1px solid #efb2b2;
+  background: #fff0f0;
+  color: #a83232;
 }
 
 .signup-form {
   display: flex;
   flex-direction: column;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 24px;
 }
 
 .form-field {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
 }
 
 .form-field label {
+  margin-bottom: 7px;
   font-size: 14px;
   font-weight: 700;
 }
 
-.form-field input {
+.form-field input,
+.form-field select {
   width: 100%;
   padding: 13px 14px;
   border: 1px solid var(--border);
@@ -142,29 +158,96 @@
   font: inherit;
 }
 
-.form-field input:focus {
+.form-field input::placeholder {
+  color: #77746f;
+}
+
+.form-field input:focus,
+.form-field select:focus {
   border-color: var(--primary);
   outline: 3px solid rgba(102, 117, 245, 0.14);
 }
 
-.checkbox-option {
+.form-field.invalid input,
+.form-field.invalid select {
+  border-color: #d64b4b;
+}
+
+.form-field.invalid input:focus,
+.form-field.invalid select:focus {
+  outline-color: rgba(214, 75, 75, 0.14);
+}
+
+.field-error {
+  margin: 5px 0 0;
+  color: #b93838;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.inline-status {
+  display: none;
+  margin: 5px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.inline-status.valid {
+  display: block;
+  color: #24713e;
+}
+
+.inline-status.invalid {
+  display: block;
+  color: #b93838;
+}
+
+.show-password-option {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: 8px;
+  margin: 18px 0;
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 700;
 }
 
-.checkbox-option input {
+.show-password-option input {
   width: 16px;
   height: 16px;
   accent-color: var(--primary);
 }
 
-.signup-button {
+.password-rules {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-soft);
+}
+
+.password-rules h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.password-rules p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.create-account-button {
   width: 100%;
-  padding: 13px 18px;
+  min-height: 46px;
+  margin-top: 18px;
+  padding: 12px 22px;
   border: 0;
   border-radius: 16px;
   background: var(--primary);
@@ -173,7 +256,7 @@
   cursor: pointer;
 }
 
-.signup-button:hover {
+.create-account-button:hover {
   background: var(--primary-dark);
 }
 
@@ -186,19 +269,12 @@
 }
 
 .login-card h3 {
-  margin: 0 0 6px;
+  margin: 0 0 14px;
   font-size: 17px;
-}
-
-.login-card p {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.5;
 }
 
 .login-button {
   display: inline-flex;
-  margin-top: 14px;
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -233,5 +309,13 @@
 
   .signup-hero > h2 {
     font-size: 32px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field.full-width {
+    grid-column: auto;
   }
 }
