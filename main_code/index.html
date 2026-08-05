@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta
     name="description"
-    content="FocusFlow helps students organise tasks, stay focused, and track their study progress."
+    content="FocusFlow helps students manage tasks, complete focus sessions, and track study progress."
   >
-  <title>FocusFlow</title>
+  <title>FocusFlow Dashboard</title>
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/pages/index.css">
 </head>
@@ -15,15 +15,11 @@
   <div class="app-layout">
     <aside class="sidebar">
       <div class="brand">
-        <img
-          class="logo"
-          src="images/logo.png"
-          alt="FocusFlow logo"
-        >
+        <img class="logo" src="images/logo.png" alt="FocusFlow logo">
 
         <div class="brand-text">
           <h1>FocusFlow</h1>
-          <p>Study smarter</p>
+          <p>Study smarter, feel better</p>
         </div>
       </div>
 
@@ -35,18 +31,20 @@
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
-              d="M4 10.5 12 4l8 6.5V20H4v-9.5Z"
+              d="M3 12 12 4l9 8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 10v10h14V10M9 20v-6h6v6"
               stroke="currentColor"
               stroke-width="2"
               stroke-linejoin="round"
             />
-            <path
-              d="M9 20v-6h6v6"
-              stroke="currentColor"
-              stroke-width="2"
-            />
           </svg>
-          <span>Home</span>
+          <span>Dashboard</span>
         </a>
 
         <a
@@ -55,15 +53,21 @@
           data-navigation-page="tasks"
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect
+              x="5"
+              y="4"
+              width="14"
+              height="16"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
             <path
-              d="M6 5h12M6 12h12M6 19h12"
+              d="M9 9h6M9 13h6M9 17h4"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
             />
-            <circle cx="3" cy="5" r="1" fill="currentColor" />
-            <circle cx="3" cy="12" r="1" fill="currentColor" />
-            <circle cx="3" cy="19" r="1" fill="currentColor" />
           </svg>
           <span>Tasks</span>
         </a>
@@ -77,12 +81,12 @@
             <circle
               cx="12"
               cy="13"
-              r="8"
+              r="7"
               stroke="currentColor"
               stroke-width="2"
             />
             <path
-              d="M12 13V8M9 3h6"
+              d="M12 2v4M12 13l4-3"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
@@ -97,19 +101,28 @@
           data-navigation-page="break"
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M7 4h10v3a5 5 0 0 1-10 0V4Z"
+            <circle
+              cx="7"
+              cy="8"
+              r="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="17"
+              cy="8"
+              r="2"
               stroke="currentColor"
               stroke-width="2"
             />
             <path
-              d="M12 12v4M8 20h8"
+              d="M3 20v-3a4 4 0 0 1 8 0v3M13 20v-3a4 4 0 0 1 8 0v3"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
             />
           </svg>
-          <span>Break Timer</span>
+          <span>Breaks</span>
         </a>
 
         <a
@@ -119,7 +132,7 @@
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
-              d="M5 19V9M12 19V5M19 19v-7"
+              d="M4 19V5M9 19v-7M14 19V9M19 19V3"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
@@ -157,48 +170,233 @@
 
         <div class="user-details">
           <p class="user-name">Huan Qi</p>
-          <p class="user-role">Student</p>
+          <p class="user-role">Year 12 • New Zealand</p>
         </div>
       </div>
     </aside>
 
-    <main class="homepage">
-      <section class="hero">
-        <p class="eyebrow">Welcome to FocusFlow</p>
-        <h2>Study with focus and purpose.</h2>
+    <main class="dashboard">
+      <header class="topbar">
+        <div>
+          <h2>Good afternoon, Huan Qi!</h2>
+          <p>Let's make today productive.</p>
+        </div>
 
-        <p class="description">
-          Organise your tasks, complete focused study sessions, take structured
-          breaks, and monitor your progress.
-        </p>
-
-        <div class="actions">
-          <button class="primary-button" type="button">
-            Get Started
+        <div class="topbar-actions">
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10 20a2 2 0 0 0 4 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="notification-dot"></span>
           </button>
 
-          <button class="secondary-button" type="button">
-            Learn More
+          <button class="icon-button" type="button" aria-label="Quick settings">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
           </button>
+
+          <button class="icon-button" type="button" aria-label="Profile">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M4 20a8 8 0 0 1 16 0"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="dashboard-grid">
+        <article class="card tasks-card">
+          <div class="card-header">
+            <h3>Today's Tasks</h3>
+            <a class="text-link" href="#">View all</a>
+          </div>
+
+          <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="5"
+                  y="4"
+                  width="14"
+                  height="16"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M9 9h6M9 13h6M9 17h4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+
+            <h4>No tasks due today</h4>
+            <p>Your scheduled tasks will appear here.</p>
+          </div>
+
+          <button class="add-task-button" type="button">+ Add Task</button>
+        </article>
+
+        <div class="side-cards">
+          <article class="card focus-card">
+            <h3>Start a Focus Session</h3>
+            <p>Stay focused. You've got this!</p>
+
+            <button class="focus-button" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+              <span>Start 25-Minute Session</span>
+            </button>
+
+            <p class="card-detail">
+              A quick focus block is the easiest way to make progress without
+              overthinking where to start.
+            </p>
+          </article>
+
+          <article class="card streak-card">
+            <h3>Study Streak</h3>
+
+            <div class="streak-value">
+              <span aria-hidden="true">🔥</span>
+              <strong>0 days</strong>
+            </div>
+
+            <p>Keep it up!</p>
+
+            <p class="card-detail">
+              Complete one focused session today to begin your streak.
+            </p>
+          </article>
         </div>
       </section>
 
-      <section class="features" aria-label="FocusFlow features">
-        <article class="feature">
-          <h3>Plan</h3>
-          <p>Organise study tasks and keep track of important work.</p>
-        </article>
+      <section class="card progress-card">
+        <h3>Today's Progress</h3>
 
-        <article class="feature">
-          <h3>Focus</h3>
-          <p>Use structured study sessions and planned breaks.</p>
-        </article>
+        <div class="progress-grid">
+          <article class="progress-item">
+            <div class="progress-icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                  cx="12"
+                  cy="13"
+                  r="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 2v4M12 13l4-3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
 
-        <article class="feature">
-          <h3>Progress</h3>
-          <p>Review completed tasks and monitor study habits.</p>
-        </article>
+            <div>
+              <strong>0 min</strong>
+              <span>Focus time today</span>
+            </div>
+          </article>
+
+          <article class="progress-item">
+            <div class="progress-icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect
+                  x="5"
+                  y="4"
+                  width="14"
+                  height="16"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M9 9h6M9 13h6M9 17h4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <strong>0/0</strong>
+              <span>Tasks done</span>
+            </div>
+          </article>
+
+          <article class="progress-item">
+            <div class="progress-icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="8"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M8 12l2.5 2.5L16 9"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <strong>0/60 min</strong>
+              <span>Daily goal</span>
+            </div>
+          </article>
+        </div>
       </section>
+
+      <footer class="dashboard-footer">
+        <span>© 2026 FocusFlow</span>
+        <span>Study smarter, feel better.</span>
+      </footer>
     </main>
   </div>
 
