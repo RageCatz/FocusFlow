@@ -250,9 +250,13 @@ textarea:focus-visible {
   display: block;
 }
 
+.notification-dropdown {
+  width: 360px;
+}
+
 .dropdown-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   padding: 16px 18px;
@@ -264,13 +268,22 @@ textarea:focus-visible {
   font-size: 16px;
 }
 
-.dropdown-heading span {
+.dropdown-heading p {
+  margin: 4px 0 0;
   color: var(--text-secondary);
   font-size: 12px;
 }
 
+.dropdown-heading > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .notification-list {
   display: flex;
+  max-height: 340px;
+  overflow-y: auto;
   flex-direction: column;
 }
 
@@ -278,32 +291,55 @@ textarea:focus-visible {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  width: 100%;
   padding: 15px 18px;
+  border: 0;
   border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
 }
 
 .notification-item:last-child {
   border-bottom: 0;
 }
 
+.notification-item:hover {
+  background: var(--surface-soft);
+}
+
+.notification-item.unread {
+  background: rgba(102, 117, 245, 0.08);
+}
+
+.notification-item.read {
+  opacity: 0.68;
+}
+
 .notification-icon {
   display: grid;
-  width: 38px;
-  height: 38px;
-  flex: 0 0 38px;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 13px;
   background: var(--primary-soft);
   color: var(--primary);
 }
 
 .notification-icon svg {
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
+}
+
+.notification-copy {
+  flex: 1;
 }
 
 .notification-copy strong,
-.notification-copy span {
+.notification-copy span,
+.notification-copy small {
   display: block;
 }
 
@@ -315,7 +351,45 @@ textarea:focus-visible {
   margin-top: 4px;
   color: var(--text-secondary);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
+}
+
+.notification-copy small {
+  margin-top: 7px;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.notification-item.read .notification-copy small {
+  color: var(--text-secondary);
+}
+
+.notification-footer {
+  padding: 11px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-soft);
+  text-align: right;
+}
+
+.mark-read-button {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mark-read-button:hover {
+  background: var(--primary-soft);
+}
+
+.notification-dot[hidden],
+.mark-read-button[hidden] {
+  display: none;
 }
 
 .profile-summary {
