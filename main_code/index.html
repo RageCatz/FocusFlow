@@ -8,9 +8,10 @@
     content="FocusFlow helps students organise tasks, stay focused, and track their study progress."
   >
   <title>FocusFlow</title>
-    <link rel="stylesheet" href="css/shared.css">
-    <link rel="stylesheet" href="css/pages/index.css"></head>
-<body>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/pages/index.css">
+</head>
+<body data-page="home">
   <div class="app-layout">
     <aside class="sidebar">
       <div class="brand">
@@ -27,7 +28,11 @@
       </div>
 
       <nav class="navigation" aria-label="Main navigation">
-        <a class="navigation-link active" href="index.html">
+        <a
+          class="navigation-link"
+          href="index.html"
+          data-navigation-page="home"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M4 10.5 12 4l8 6.5V20H4v-9.5Z"
@@ -44,7 +49,11 @@
           <span>Home</span>
         </a>
 
-        <a class="navigation-link" href="#">
+        <a
+          class="navigation-link"
+          href="#"
+          data-navigation-page="tasks"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M6 5h12M6 12h12M6 19h12"
@@ -59,7 +68,11 @@
           <span>Tasks</span>
         </a>
 
-        <a class="navigation-link" href="#">
+        <a
+          class="navigation-link"
+          href="#"
+          data-navigation-page="focus"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle
               cx="12"
@@ -78,7 +91,11 @@
           <span>Focus Session</span>
         </a>
 
-        <a class="navigation-link" href="#">
+        <a
+          class="navigation-link"
+          href="#"
+          data-navigation-page="break"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M7 4h10v3a5 5 0 0 1-10 0V4Z"
@@ -95,7 +112,11 @@
           <span>Break Timer</span>
         </a>
 
-        <a class="navigation-link" href="#">
+        <a
+          class="navigation-link"
+          href="#"
+          data-navigation-page="progress"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M5 19V9M12 19V5M19 19v-7"
@@ -107,7 +128,11 @@
           <span>Progress</span>
         </a>
 
-        <a class="navigation-link" href="#">
+        <a
+          class="navigation-link"
+          href="#"
+          data-navigation-page="settings"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle
               cx="12"
@@ -140,7 +165,6 @@
     <main class="homepage">
       <section class="hero">
         <p class="eyebrow">Welcome to FocusFlow</p>
-
         <h2>Study with focus and purpose.</h2>
 
         <p class="description">
@@ -162,26 +186,22 @@
       <section class="features" aria-label="FocusFlow features">
         <article class="feature">
           <h3>Plan</h3>
-          <p>
-            Organise study tasks and keep track of important work.
-          </p>
+          <p>Organise study tasks and keep track of important work.</p>
         </article>
 
         <article class="feature">
           <h3>Focus</h3>
-          <p>
-            Use structured study sessions and planned breaks.
-          </p>
+          <p>Use structured study sessions and planned breaks.</p>
         </article>
 
         <article class="feature">
           <h3>Progress</h3>
-          <p>
-            Review completed tasks and monitor study habits.
-          </p>
+          <p>Review completed tasks and monitor study habits.</p>
         </article>
       </section>
     </main>
   </div>
+
+  <script src="js/common.js"></script>
 </body>
 </html>
