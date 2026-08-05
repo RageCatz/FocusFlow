@@ -7,6 +7,8 @@ const BREAK_SETTINGS_KEY = "focusflowDashboardSettings";
 const BREAK_STATE_KEY = "focusflowActiveBreakSession";
 const BREAK_STATS_KEY = "focusflowBreakStats";
 const BREAK_SOUND_KEY = "focusflowBreakSound";
+const BREAK_AUTO_START_KEY = "focusflowAutoStartBreakRequested";
+const FOCUS_AUTO_START_KEY = "focusflowAutoStartFocusRequested";
 
 const TIMER_RADIUS = 116;
 const TIMER_CIRCUMFERENCE = 2 * Math.PI * TIMER_RADIUS;
@@ -17,7 +19,10 @@ let breakSettings = {
   ...FocusFlowShared.readStorage(BREAK_SETTINGS_KEY, {})
 };
 
-let durationMinutes = 5;
+let durationMinutes = Math.max(
+  1,
+  Number(breakSettings.shortBreakDuration || 5)
+);
 let totalSeconds = durationMinutes * 60;
 let remainingSeconds = totalSeconds;
 let timerRunning = false;
@@ -151,6 +156,40 @@ function restoreBreakState() {
   syncDurationControls();
 }
 
+function applySavedBreakPreferences() {
+  const latestSettings = {
+    ...breakSettings,
+    ...FocusFlowShared.readStorage(BREAK_SETTINGS_KEY, {})
+  };
+
+  breakSettings = latestSettings;
+
+  const shortDuration = clampDuration(
+    latestSettings.shortBreakDuration || 5
+  );
+  const longDuration = clampDuration(
+    latestSettings.longBreakDuration || 15
+  );
+
+  /*
+   * The normal Break page starts with the saved short-break duration.
+   * The final preset represents the user's saved long-break duration.
+   */
+  const longButton = document.querySelector("[data-long-break-option]");
+  if (longButton) {
+    longButton.dataset.breakDuration = String(longDuration);
+
+    const strong = longButton.querySelector("strong");
+    if (strong) strong.textContent = `${longDuration} min`;
+  }
+
+  if (!FocusFlowShared.readStorage(BREAK_STATE_KEY, null)) {
+    durationMinutes = shortDuration;
+    totalSeconds = durationMinutes * 60;
+    remainingSeconds = totalSeconds;
+  }
+}
+
 function syncDurationControls() {
   const input = document.getElementById("customDuration");
   if (input) input.value = durationMinutes;
@@ -256,6 +295,7 @@ function completeBreak() {
 
   if (
     breakSettings.notifications &&
+    breakSettings.breakNotifications !== false &&
     "Notification" in window &&
     Notification.permission === "granted"
   ) {
@@ -411,7 +451,14 @@ function createAmbientSound(type) {
 
   const context = new AudioContextClass();
   const master = context.createGain();
-  master.gain.value = 0.055;
+  const savedVolume = Math.min(
+    100,
+    Math.max(
+      0,
+      Number(FocusFlowShared.readStorage("focusflowAmbientVolume", 45))
+    )
+  );
+  master.gain.value = 0.1 * (savedVolume / 100);
   master.connect(context.destination);
 
   const nodes = [];
@@ -557,6 +604,17 @@ function connectControls() {
   document.getElementById("stopBreakAlarmButton")?.addEventListener("click", () => {
     stopBreakAlarm();
     clearBreakState();
+
+    const latestSettings = {
+      ...breakSettings,
+      ...FocusFlowShared.readStorage(BREAK_SETTINGS_KEY, {})
+    };
+
+    FocusFlowShared.writeStorage(
+      FOCUS_AUTO_START_KEY,
+      Boolean(latestSettings.autoStartFocusSessions)
+    );
+
     window.location.href = "focus.html";
   });
 
@@ -566,7 +624,13 @@ function connectControls() {
 }
 
 function initializeBreakPage() {
+  applySavedBreakPreferences();
   restoreBreakState();
+
+  const shouldAutoStartBreak = Boolean(
+    FocusFlowShared.readStorage(BREAK_AUTO_START_KEY, false)
+  );
+  localStorage.removeItem(BREAK_AUTO_START_KEY);
 
   const savedSound = FocusFlowShared.readStorage(BREAK_SOUND_KEY, "off");
   const soundSelect = document.getElementById("breakSoundSelect");
@@ -590,6 +654,14 @@ function initializeBreakPage() {
   });
 
   connectControls();
+
+  if (
+    shouldAutoStartBreak &&
+    !timerRunning &&
+    remainingSeconds > 0
+  ) {
+    startBreak();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", initializeBreakPage);

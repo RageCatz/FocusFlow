@@ -4,6 +4,8 @@
 
 const FOCUS_DATA_KEY = "focusflowDashboardData";
 const FOCUS_SETTINGS_KEY = "focusflowDashboardSettings";
+const FOCUS_AUTO_BREAK_KEY = "focusflowAutoStartBreakRequested";
+const FOCUS_AUTO_START_KEY = "focusflowAutoStartFocusRequested";
 const FOCUS_TASK_KEY = "focusflowSelectedTaskId";
 const FOCUS_SESSION_KEY = "focusflowActiveFocusSession";
 const FOCUS_MONITORING_KEY = "focusflowStudyMonitoringEnabled";
@@ -233,6 +235,14 @@ function applyDuration(value, announce = true) {
 
   stopTimerInterval();
   document.getElementById("focusDuration").value = durationMinutes;
+
+  const savedAmbientSound = FocusFlowShared.readStorage(
+    "focusflowDefaultAmbientSound",
+    "off"
+  );
+  const ambientSelect = document.getElementById("ambientSound");
+  if (ambientSelect) ambientSelect.value = savedAmbientSound;
+
   updatePresetButtons();
   updateTimerDisplay();
   setTimerState("ready", cameraStream ? "Ready when presence is detected" : "Enable monitoring to begin");
@@ -660,6 +670,7 @@ async function completeFocusSession() {
 
     if (
       latestSettings.notifications &&
+      latestSettings.breakNotifications !== false &&
       "Notification" in window &&
       Notification.permission === "granted"
     ) {
@@ -684,7 +695,7 @@ async function completeFocusSession() {
    */
   if (focusSettings.autoStartBreaks) {
     FocusFlowShared.showToast(
-      "Focus complete. Stop the alarm when you're ready, then take your break.",
+      "Focus complete. Stop the alarm to begin your break automatically.",
       "info"
     );
   }
@@ -993,7 +1004,12 @@ function notifyReturnToStudy() {
 
   FocusFlowShared.showToast("Focus timer paused — return to your study area to continue.", "error");
 
-  if (focusSettings.notifications && "Notification" in window && Notification.permission === "granted") {
+  if (
+    focusSettings.notifications &&
+    focusSettings.distractionAlerts !== false &&
+    "Notification" in window &&
+    Notification.permission === "granted"
+  ) {
     try {
       new Notification("FocusFlow: return to study", {
         body: "Your focus timer is paused. It will resume after the camera detects you again."
@@ -1299,7 +1315,14 @@ async function startAmbientSound(type) {
     const context = new AudioContextClass();
     await context.resume();
     const master = context.createGain();
-    master.gain.value = 0.08;
+    const savedVolume = Math.min(
+      100,
+      Math.max(
+        0,
+        Number(FocusFlowShared.readStorage("focusflowAmbientVolume", 45))
+      )
+    );
+    master.gain.value = 0.12 * (savedVolume / 100);
     master.connect(context.destination);
     const nodes = [master];
 
@@ -1409,7 +1432,23 @@ function connectFocusControls() {
 
   document.getElementById("stopAlarmButton")?.addEventListener("click", () => {
     stopTimerAlarm();
-    FocusFlowShared.showToast("Timer alarm stopped. Opening your break…", "success");
+
+    const latestSettings = {
+      ...focusSettings,
+      ...FocusFlowShared.readStorage(FOCUS_SETTINGS_KEY, {})
+    };
+
+    FocusFlowShared.writeStorage(
+      FOCUS_AUTO_BREAK_KEY,
+      Boolean(latestSettings.autoStartBreaks)
+    );
+
+    FocusFlowShared.showToast(
+      latestSettings.autoStartBreaks
+        ? "Timer alarm stopped. Opening and starting your break…"
+        : "Timer alarm stopped. Opening your break…",
+      "success"
+    );
 
     window.setTimeout(() => {
       window.location.href = "break.html";
@@ -1626,6 +1665,25 @@ function initialiseFocusPage() {
   renderDailyProgress();
 
   restoreMonitoringOnFocusLoad();
+
+  const shouldAutoStartFocus = Boolean(
+    FocusFlowShared.readStorage(FOCUS_AUTO_START_KEY, false)
+  );
+  localStorage.removeItem(FOCUS_AUTO_START_KEY);
+
+  if (shouldAutoStartFocus) {
+    window.setTimeout(() => {
+      const startButton = document.getElementById("startTimerButton");
+
+      if (startButton && !timerRunning) {
+        startButton.click();
+        FocusFlowShared.showToast(
+          "Auto-starting your next focus session.",
+          "info"
+        );
+      }
+    }, 700);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", initialiseFocusPage);
