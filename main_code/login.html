@@ -17,6 +17,7 @@
       <section class="login-hero">
         <a class="login-brand" href="index.html">
           <img src="images/logo.png" alt="FocusFlow logo">
+
           <div>
             <h1>FocusFlow</h1>
             <p>Study smarter, feel better</p>
@@ -109,37 +110,52 @@
           <p>Welcome back. Pick up where you left off.</p>
         </div>
 
-        <form class="login-form">
-          <div class="form-field">
+        <div
+          class="system-message"
+          id="loginMessage"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+        <form class="login-form" id="loginForm" novalidate>
+          <div class="form-field" id="usernameField">
             <label for="username">Username</label>
+
             <input
               id="username"
               name="username"
               type="text"
               placeholder="Enter your username"
               autocomplete="username"
+              aria-describedby="usernameError"
             >
+
+            <p class="field-error" id="usernameError"></p>
           </div>
 
-          <div class="form-field">
+          <div class="form-field" id="passwordField">
             <label for="password">Password</label>
+
             <input
               id="password"
               name="password"
               type="password"
               placeholder="Enter your password"
               autocomplete="current-password"
+              aria-describedby="passwordError"
             >
+
+            <p class="field-error" id="passwordError"></p>
           </div>
 
           <div class="login-options">
             <label class="checkbox-option">
-              <input type="checkbox" name="showPassword">
+              <input id="showLoginPassword" type="checkbox">
               <span>Show password</span>
             </label>
 
             <label class="checkbox-option">
-              <input type="checkbox" name="remember">
+              <input id="rememberLogin" type="checkbox">
               <span>Remember me</span>
             </label>
           </div>
@@ -148,6 +164,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M8 6.5v11l9-5.5z"></path>
             </svg>
+
             <span>Log In</span>
           </button>
         </form>
@@ -160,5 +177,7 @@
       </section>
     </div>
   </main>
+
+  <script src="js/pages/login.js"></script>
 </body>
 </html>
