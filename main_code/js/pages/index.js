@@ -101,32 +101,7 @@ function getGreeting() {
 }
 
 function fillProfile() {
-  const profile = dashboardData.profile;
-  const avatar = profile.avatar || profile.name.slice(0, 2).toUpperCase();
-
-  document.querySelectorAll("[data-profile-name]").forEach(element => {
-    element.textContent = profile.name;
-  });
-
-  document.querySelectorAll("[data-profile-username]").forEach(element => {
-    element.textContent = `@${profile.username}`;
-  });
-
-  document.querySelectorAll("[data-profile-country]").forEach(element => {
-    element.textContent = profile.country;
-  });
-
-  document.querySelectorAll("[data-profile-year]").forEach(element => {
-    element.textContent = profile.year;
-  });
-
-  document.querySelectorAll("[data-profile-industry]").forEach(element => {
-    element.textContent = profile.industry;
-  });
-
-  document.querySelectorAll("[data-profile-avatar]").forEach(element => {
-    element.textContent = avatar;
-  });
+  FocusFlowShared.fillProfile(dashboardData.profile);
 }
 
 function createTaskRow(task, isOverdue = false) {
@@ -326,16 +301,9 @@ function markAllNotificationsRead() {
 }
 
 function applySettings() {
-  document.body.classList.toggle("dark-mode", dashboardData.settings.darkMode);
+  FocusFlowShared.applyBodyTheme(dashboardData.settings.darkMode);
   document.body.classList.toggle("focus-mode", dashboardData.settings.focusMode);
-
-  document.querySelectorAll("[data-toggle]").forEach(button => {
-    const settingName = button.dataset.toggle;
-    const enabled = Boolean(dashboardData.settings[settingName]);
-
-    button.classList.toggle("on", enabled);
-    button.setAttribute("aria-pressed", String(enabled));
-  });
+  FocusFlowShared.syncToggleButtons(dashboardData.settings);
 }
 
 function toggleSetting(settingName) {
