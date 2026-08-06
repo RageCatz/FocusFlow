@@ -1,64 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
     name="description"
     content="Create a FocusFlow account to organise tasks, focus sessions, and study progress."
   >
-  <title>Sign Up | FocusFlow</title>
-  <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/pages/signup.css">
-</head>
-<body>
-  <main class="signup-shell">
-    <div class="signup-card">
-      <section class="signup-hero">
-        <a class="signup-brand" href="index.html">
-          <img src="images/logo.png" alt="FocusFlow logo">
-
-          <div>
-            <h1>FocusFlow</h1>
-            <p>Study smarter, feel better</p>
-          </div>
-        </a>
-
-        <h2>Create your study account.</h2>
-
-        <p class="hero-description">
-          Start once, stay organised every day. Your tasks, focus sessions,
-          settings, and progress stay ready whenever you come back.
-        </p>
-
-        <article class="saved-card">
-          <h3>What gets saved?</h3>
-          <p>
-            Your dashboard, completed tasks, focus timer settings, break
-            choices, streak, and profile information are saved under your
-            username.
+    <title>
+      Sign Up | FocusFlow
+    </title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/pages/signup.css">
+  </head>
+  <body>
+    <main class="signup-shell">
+      <div class="signup-card">
+        <section class="signup-hero">
+          <a class="signup-brand" href="index.html">
+            <img src="images/logo.png" alt="FocusFlow logo">
+            <div>
+              <h1>
+                FocusFlow
+              </h1>
+              <p>
+                Study smarter, feel better
+              </p>
+            </div>
+          </a>
+          <h2>
+            Create your study account.
+          </h2>
+          <p class="hero-description">
+            Start once, stay organised every day. Your tasks, focus sessions, settings, and progress stay ready whenever you come back.
           </p>
-        </article>
-      </section>
-
-      <section class="signup-form-section">
-        <header class="signup-heading">
-          <h2>Sign up</h2>
-          <p>Make your account first, then you can log in any time.</p>
-        </header>
-
-        <div
+          <article class="saved-card">
+            <h3>
+              What gets saved?
+            </h3>
+            <p>
+              Your dashboard, completed tasks, focus timer settings, break choices, streak, and profile information are saved under your username.
+            </p>
+          </article>
+        </section>
+        <section class="signup-form-section">
+          <header class="signup-heading">
+            <h2>
+              Sign up
+            </h2>
+            <p>
+              Make your account first, then you can log in any time.
+            </p>
+          </header>
+          <div
           class="system-message"
           id="signupMessage"
           role="status"
           aria-live="polite"
-        ></div>
-
-        <form class="signup-form" id="signupForm" novalidate>
-          <div class="form-grid">
-            <div class="form-field" id="nameField">
-              <label for="name">Full name</label>
-              <input
+        >
+          </div>
+          <form class="signup-form" id="signupForm" novalidate>
+            <div class="form-grid">
+              <div class="form-field" id="nameField">
+                <label for="name">
+                  Full name
+                </label>
+                <input
                 id="name"
                 name="name"
                 type="text"
@@ -66,12 +73,14 @@
                 autocomplete="name"
                 aria-describedby="nameError"
               >
-              <p class="field-error" id="nameError"></p>
-            </div>
-
-            <div class="form-field" id="usernameField">
-              <label for="username">Username</label>
-              <input
+                <p class="field-error" id="nameError">
+                </p>
+              </div>
+              <div class="form-field" id="usernameField">
+                <label for="username">
+                  Username
+                </label>
+                <input
                 id="username"
                 name="username"
                 type="text"
@@ -79,12 +88,14 @@
                 autocomplete="username"
                 aria-describedby="usernameError"
               >
-              <p class="field-error" id="usernameError"></p>
-            </div>
-
-            <div class="form-field" id="countryField">
-              <label for="country">Country</label>
-              <input
+                <p class="field-error" id="usernameError">
+                </p>
+              </div>
+              <div class="form-field" id="countryField">
+                <label for="country">
+                  Country
+                </label>
+                <input
                 id="country"
                 name="country"
                 type="text"
@@ -92,49 +103,73 @@
                 autocomplete="country-name"
                 aria-describedby="countryError"
               >
-              <p class="field-error" id="countryError"></p>
-            </div>
-
-            <div class="form-field" id="yearLevelField">
-              <label for="yearLevel">Year level</label>
-              <select
+                <p class="field-error" id="countryError">
+                </p>
+              </div>
+              <div class="form-field" id="yearLevelField">
+                <label for="yearLevel">
+                  Year level
+                </label>
+                <select
                 id="yearLevel"
                 name="yearLevel"
                 aria-describedby="yearLevelError"
               >
-                <option value="">Select your year level</option>
-                <option value="Year 9" selected>Year 9</option>
-                <option value="Year 10">Year 10</option>
-                <option value="Year 11">Year 11</option>
-                <option value="Year 12">Year 12</option>
-                <option value="Year 13">Year 13</option>
-              </select>
-              <p class="field-error" id="yearLevelError"></p>
-            </div>
-
-            <div class="form-field full-width" id="industryField">
-              <label for="industry">Industry</label>
-              <select
+                  <option value="">
+                    Select your year level
+                  </option>
+                  <option value="Year 9" selected>
+                    Year 9
+                  </option>
+                  <option value="Year 10">
+                    Year 10
+                  </option>
+                  <option value="Year 11">
+                    Year 11
+                  </option>
+                  <option value="Year 12">
+                    Year 12
+                  </option>
+                  <option value="Year 13">
+                    Year 13
+                  </option>
+                </select>
+                <p class="field-error" id="yearLevelError">
+                </p>
+              </div>
+              <div class="form-field full-width" id="industryField">
+                <label for="industry">
+                  Industry
+                </label>
+                <select
                 id="industry"
                 name="industry"
                 aria-describedby="industryError"
               >
-                <option value="">Select your industry</option>
-                <option value="High School Student" selected>
-                  High School Student
-                </option>
-                <option value="University Student">University Student</option>
-                <option value="Working Professional">
-                  Working Professional
-                </option>
-                <option value="Other">Other</option>
-              </select>
-              <p class="field-error" id="industryError"></p>
-            </div>
-
-            <div class="form-field" id="passwordField">
-              <label for="password">Password</label>
-              <input
+                  <option value="">
+                    Select your industry
+                  </option>
+                  <option value="High School Student" selected>
+                    High School Student
+                  </option>
+                  <option value="University Student">
+                    University Student
+                  </option>
+                  <option value="Working Professional">
+                    Working Professional
+                  </option>
+                  <option value="Other">
+                    Other
+                  </option>
+                </select>
+                <p class="field-error" id="industryError">
+                </p>
+              </div>
+              <div class="form-field" id="passwordField">
+                <label for="password">
+                  Password
+                </label>
+                <input
                 id="password"
                 name="password"
                 type="password"
@@ -142,13 +177,16 @@
                 autocomplete="new-password"
                 aria-describedby="passwordError passwordHint"
               >
-              <p class="field-error" id="passwordError"></p>
-              <p class="inline-status" id="passwordHint"></p>
-            </div>
-
-            <div class="form-field" id="confirmPasswordField">
-              <label for="confirmPassword">Confirm password</label>
-              <input
+                <p class="field-error" id="passwordError">
+                </p>
+                <p class="inline-status" id="passwordHint">
+                </p>
+              </div>
+              <div class="form-field" id="confirmPasswordField">
+                <label for="confirmPassword">
+                  Confirm password
+                </label>
+                <input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
@@ -156,37 +194,43 @@
                 autocomplete="new-password"
                 aria-describedby="confirmPasswordError passwordMatch"
               >
-              <p class="field-error" id="confirmPasswordError"></p>
-              <p class="inline-status" id="passwordMatch"></p>
+                <p class="field-error" id="confirmPasswordError">
+                </p>
+                <p class="inline-status" id="passwordMatch">
+                </p>
+              </div>
             </div>
+            <label class="show-password-option">
+              <input id="showSignupPasswords" type="checkbox">
+              <span>
+                Show passwords
+              </span>
+            </label>
+            <div class="password-rules">
+              <h3>
+                Password rules
+              </h3>
+              <p>
+                Use at least 6 characters, include at least 1 number, and use letters or numbers only.
+              </p>
+            </div>
+            <button class="create-account-button" type="submit">
+              Create Account
+            </button>
+          </form>
+          <div class="login-card">
+            <h3>
+              Already have an account?
+            </h3>
+            <a class="login-button" href="login.html">
+              Go to Login
+            </a>
           </div>
-
-          <label class="show-password-option">
-            <input id="showSignupPasswords" type="checkbox">
-            <span>Show passwords</span>
-          </label>
-
-          <div class="password-rules">
-            <h3>Password rules</h3>
-            <p>
-              Use at least 6 characters, include at least 1 number, and use
-              letters or numbers only.
-            </p>
-          </div>
-
-          <button class="create-account-button" type="submit">
-            Create Account
-          </button>
-        </form>
-
-        <div class="login-card">
-          <h3>Already have an account?</h3>
-          <a class="login-button" href="login.html">Go to Login</a>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <script src="js/pages/signup.js"></script>
-</body>
+        </section>
+      </div>
+    </main>
+    <script src="js/shared.js"></script>
+    <script src="js/pages/signup.js">
+    </script>
+  </body>
 </html>
