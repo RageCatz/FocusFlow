@@ -835,40 +835,7 @@ button {
   gap: 14px;
 }
 /* General system notifications shown near the top of the page. */
-.toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translate(-50%, -12px);
-  width: min(92vw, 520px);
-  padding: 14px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  background: #1f2a44;
-  color: #fff;
-  box-shadow: 0 16px 36px rgba(31, 42, 68, 0.22);
-  font-weight: 800;
-  text-align: center;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2000;
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
 
-.toast.show {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.toast.success {
-  background: #237449;
-}
-
-.toast.error {
-  background: #a83f4a;
-}
 
 .system-message {
   display: none;
@@ -1908,15 +1875,7 @@ body.dark-mode .site-footer {
 #clearNotifications { padding: 10px 12px; border-radius: 12px; }
 .user-card { width: 100%; text-align: left; font: inherit; }
 .notification-item { width: 100%; text-align: left; font: inherit; }
-.toast-container { position: fixed; right: 24px; bottom: 24px; z-index: 1000; display: grid; gap: 10px; }
-.toast { transform: translateY(10px); opacity: 0; padding: 12px 16px; border-radius: 12px; background: var(--surface, #fff); box-shadow: 0 12px 30px rgba(0,0,0,.16); transition: .2s ease; }
-.toast.show { transform: translateY(0); opacity: 1; }
 
-
-/* Dashboard interaction fixes */
-.topbar-actions {
-  z-index: 100;
-}
 
 .notify-panel,
 .quick-settings,
@@ -1954,4 +1913,47 @@ body.dark-mode .site-footer {
 .badge-dot[hidden],
 [data-home-stats][hidden] {
   display: none !important;
+}
+/* Dashboard notification colours in dark mode */
+body.dark-mode .notify-panel {
+  background: var(--panel);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+body.dark-mode .notify-panel .notify-head,
+body.dark-mode .notify-panel .notify-foot {
+  background: #131c2c;
+  border-color: var(--line);
+}
+
+body.dark-mode .notify-panel .notification-item {
+  background: var(--panel);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+body.dark-mode .notify-panel .notification-item:hover {
+  background: #1f2a3d;
+}
+
+body.dark-mode .notify-panel .notification-item.unread {
+  background: #222d43;
+}
+
+body.dark-mode .notify-panel .notification-title {
+  color: var(--text);
+}
+
+body.dark-mode .notify-panel .notification-text,
+body.dark-mode .notify-panel .notification-meta,
+body.dark-mode .notify-panel .notify-sub,
+body.dark-mode .notify-panel .notify-foot .muted {
+  color: var(--muted);
+}
+
+body.dark-mode .notify-panel .secondary-btn {
+  background: #202b43;
+  color: #e8eeff;
+  border-color: var(--line);
 }

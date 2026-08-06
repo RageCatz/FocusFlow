@@ -56,19 +56,10 @@ function createDefaultData() {
   };
 }
 
-function readStorage(key, fallback) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
 function loadData() {
   const defaults = createDefaultData();
-  const savedData = readStorage(DASHBOARD_KEY, {});
-  const savedSettings = readStorage(SETTINGS_KEY, {});
+  const savedData = FocusFlowShared.readStorage(DASHBOARD_KEY, {});
+  const savedSettings = FocusFlowShared.readStorage(SETTINGS_KEY, {});
 
   return {
     profile: { ...defaults.profile, ...(savedData.profile || {}) },
@@ -87,16 +78,6 @@ let dashboardData = loadData();
 function saveData() {
   localStorage.setItem(DASHBOARD_KEY, JSON.stringify(dashboardData));
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(dashboardData.settings));
-}
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>'"]/g, character => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "'": "&#39;",
-    '"': "&quot;"
-  })[character]);
 }
 
 function formatDate(dateString) {
@@ -157,14 +138,14 @@ function createTaskRow(task, isOverdue = false) {
         <button
           class="checkbox ${checked ? "checked" : ""}"
           type="button"
-          data-task-id="${escapeHtml(task.id)}"
-          aria-label="Toggle ${escapeHtml(task.name)}"
+          data-task-id="${FocusFlowShared.escapeHtml(task.id)}"
+          aria-label="Toggle ${FocusFlowShared.escapeHtml(task.name)}"
         >
           ${checked ? checkIcon : ""}
         </button>
 
         <div>
-          <div class="task-title">${escapeHtml(task.name)}</div>
+          <div class="task-title">${FocusFlowShared.escapeHtml(task.name)}</div>
           <div class="task-sub">Due: ${formatDate(task.dueDate)}</div>
         </div>
       </div>
@@ -212,7 +193,7 @@ function toggleTask(taskId) {
   saveData();
   renderDashboard();
 
-  showToast(
+  FocusFlowShared.showToast(
     task.status === "done"
       ? `Task “${task.name}” completed`
       : `Task “${task.name}” moved back to To Do`,
@@ -221,7 +202,7 @@ function toggleTask(taskId) {
 }
 
 function createNotifications() {
-  const savedNotifications = readStorage(NOTIFICATIONS_KEY, []);
+  const savedNotifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
   const readIds = new Set(
     savedNotifications
       .filter(notification => notification.read)
@@ -299,12 +280,12 @@ function renderNotifications() {
     <button
       class="notification-item ${notification.read ? "read" : "unread"}"
       type="button"
-      data-notification-id="${escapeHtml(notification.id)}"
+      data-notification-id="${FocusFlowShared.escapeHtml(notification.id)}"
     >
       <span class="notification-mark"></span>
       <span class="notification-copy">
-        <span class="notification-title">${escapeHtml(notification.title)}</span>
-        <span class="notification-text">${escapeHtml(notification.text)}</span>
+        <span class="notification-title">${FocusFlowShared.escapeHtml(notification.title)}</span>
+        <span class="notification-text">${FocusFlowShared.escapeHtml(notification.text)}</span>
         <span class="notification-meta">
           Just now${notification.read ? " • Read" : ""}
         </span>
@@ -320,7 +301,7 @@ function renderNotifications() {
 }
 
 function markNotificationRead(notificationId) {
-  const notifications = readStorage(NOTIFICATIONS_KEY, []);
+  const notifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
 
   notifications.forEach(notification => {
     if (String(notification.id) === String(notificationId)) {
@@ -333,7 +314,7 @@ function markNotificationRead(notificationId) {
 }
 
 function markAllNotificationsRead() {
-  const notifications = readStorage(NOTIFICATIONS_KEY, []);
+  const notifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
 
   notifications.forEach(notification => {
     notification.read = true;
@@ -341,7 +322,7 @@ function markAllNotificationsRead() {
 
   localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
   renderNotifications();
-  showToast("All notifications marked as read", "success");
+  FocusFlowShared.showToast("All notifications marked as read", "success");
 }
 
 function applySettings() {
@@ -373,7 +354,7 @@ function toggleSetting(settingName) {
     showStatsOnHome: "Dashboard stats"
   };
 
-  showToast(
+  FocusFlowShared.showToast(
     `${labels[settingName]} ${dashboardData.settings[settingName] ? "enabled" : "disabled"}`,
     "info"
   );
@@ -399,86 +380,19 @@ function renderDashboard() {
   });
 }
 
-const panelIds = [
-  "notifyPanel",
-  "quickSettings",
-  "profilePanel",
-  "sidebarProfilePanel"
-];
-
-function closePanels(exceptId = "") {
-  panelIds.forEach(panelId => {
-    if (panelId === exceptId) return;
-
-    document.getElementById(panelId)?.classList.remove("open");
-  });
-
-  if (exceptId !== "sidebarProfilePanel") {
-    document.getElementById("sidebarUser")?.setAttribute("aria-expanded", "false");
+const panelController = FocusFlowShared.createPanelController(
+  ["notifyPanel", "quickSettings", "profilePanel", "sidebarProfilePanel"],
+  {
+    expandedButtonId: "sidebarUser",
+    expandedPanelId: "sidebarProfilePanel"
   }
-}
-
-function togglePanel(panelId) {
-  const panel = document.getElementById(panelId);
-  if (!panel) return;
-
-  const shouldOpen = !panel.classList.contains("open");
-  closePanels(panelId);
-  panel.classList.toggle("open", shouldOpen);
-
-  if (panelId === "sidebarProfilePanel") {
-    document.getElementById("sidebarUser")?.setAttribute(
-      "aria-expanded",
-      String(shouldOpen)
-    );
-  }
-}
-
-function showToast(message, type = "info") {
-  const container = document.getElementById("toastContainer");
-  if (!container) return;
-
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.textContent = message;
-  container.appendChild(toast);
-
-  requestAnimationFrame(() => toast.classList.add("show"));
-
-  window.setTimeout(() => {
-    toast.classList.remove("show");
-    window.setTimeout(() => toast.remove(), 250);
-  }, 2600);
-}
-
-function logout() {
-  sessionStorage.removeItem("focusflowCurrentUser");
-  sessionStorage.removeItem("focusflow_token");
-  sessionStorage.removeItem("focusflow_username");
-  window.location.href = "login.html";
-}
-
-function wirePanelButton(buttonId, panelId) {
-  const button = document.getElementById(buttonId);
-  const panel = document.getElementById(panelId);
-
-  if (!button || !panel) return;
-
-  button.addEventListener("click", event => {
-    event.stopPropagation();
-    togglePanel(panelId);
-  });
-
-  panel.addEventListener("click", event => {
-    event.stopPropagation();
-  });
-}
+);
 
 function wireEvents() {
-  wirePanelButton("notifyBtn", "notifyPanel");
-  wirePanelButton("quickSettingsBtn", "quickSettings");
-  wirePanelButton("profileBtn", "profilePanel");
-  wirePanelButton("sidebarUser", "sidebarProfilePanel");
+  panelController.connectButton("notifyBtn", "notifyPanel");
+  panelController.connectButton("quickSettingsBtn", "quickSettings");
+  panelController.connectButton("profileBtn", "profilePanel");
+  panelController.connectButton("sidebarUser", "sidebarProfilePanel");
 
   document.getElementById("clearNotifications")?.addEventListener(
     "click",
@@ -489,8 +403,8 @@ function wireEvents() {
     window.location.href = "tasks.html";
   });
 
-  document.getElementById("logoutBtn")?.addEventListener("click", logout);
-  document.getElementById("sidebarLogoutBtn")?.addEventListener("click", logout);
+  document.getElementById("logoutBtn")?.addEventListener("click", FocusFlowShared.logout);
+  document.getElementById("sidebarLogoutBtn")?.addEventListener("click", FocusFlowShared.logout);
 
   document.querySelectorAll("[data-toggle]").forEach(button => {
     button.addEventListener("click", event => {
@@ -499,10 +413,10 @@ function wireEvents() {
     });
   });
 
-  document.addEventListener("click", () => closePanels());
+  document.addEventListener("click", () => panelController.close());
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closePanels();
+    if (event.key === "Escape") panelController.close();
   });
 }
 

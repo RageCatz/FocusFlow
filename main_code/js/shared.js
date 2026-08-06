@@ -363,3 +363,98 @@ document.addEventListener("keydown", (event) => {
 
 initialiseTheme();
 renderNotifications();
+/* Reusable helpers used across FocusFlow pages. */
+window.FocusFlowShared = {
+  readStorage(key, fallbackValue) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value ?? fallbackValue;
+    } catch {
+      return fallbackValue;
+    }
+  },
+
+  escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>'"]/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "'": "&#39;",
+      '"': "&quot;"
+    })[character]);
+  },
+
+  createPanelController(panelIds, options = {}) {
+    const { expandedButtonId = "", expandedPanelId = "" } = options;
+
+    function close(exceptId = "") {
+      panelIds.forEach(panelId => {
+        if (panelId === exceptId) return;
+        document.getElementById(panelId)?.classList.remove("open");
+      });
+
+      if (expandedButtonId && exceptId !== expandedPanelId) {
+        document
+          .getElementById(expandedButtonId)
+          ?.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    function toggle(panelId) {
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      const shouldOpen = !panel.classList.contains("open");
+      close(panelId);
+      panel.classList.toggle("open", shouldOpen);
+
+      if (expandedButtonId && panelId === expandedPanelId) {
+        document
+          .getElementById(expandedButtonId)
+          ?.setAttribute("aria-expanded", String(shouldOpen));
+      }
+    }
+
+    function connectButton(buttonId, panelId) {
+      const button = document.getElementById(buttonId);
+      const panel = document.getElementById(panelId);
+
+      if (!button || !panel) return;
+
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        toggle(panelId);
+      });
+
+      panel.addEventListener("click", event => {
+        event.stopPropagation();
+      });
+    }
+
+    return { close, toggle, connectButton };
+  },
+
+  showToast(message, type = "info") {
+    const container = document.getElementById("toastContainer");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add("show"));
+
+    window.setTimeout(() => {
+      toast.classList.remove("show");
+      window.setTimeout(() => toast.remove(), 250);
+    }, 2600);
+  },
+
+  logout() {
+    sessionStorage.removeItem("focusflowCurrentUser");
+    sessionStorage.removeItem("focusflow_token");
+    sessionStorage.removeItem("focusflow_username");
+    window.location.href = "login.html";
+  }
+};
