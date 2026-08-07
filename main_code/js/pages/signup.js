@@ -215,7 +215,7 @@ showPasswordsInput.addEventListener("change", () => {
   confirmPasswordInput.type = type;
 });
 
-signupForm.addEventListener("submit", (event) => {
+signupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   nameInput.value = nameInput.value.trim();
@@ -230,8 +230,69 @@ signupForm.addEventListener("submit", (event) => {
     return;
   }
 
-  setSystemMessage(
-    "Your signup details are valid. Account creation will be added next.",
-    "success"
-  );
+  try {
+    const existingAccount = FocusFlowShared.getLocalAccount();
+
+    if (existingAccount) {
+      setSystemMessage(
+        "A local FocusFlow account already exists in this browser. Log in with it, or delete its local data from Settings before creating a different account.",
+        "error"
+      );
+      return;
+    }
+
+    const profile = {
+      name: nameInput.value,
+      username: usernameInput.value,
+      country: countryInput.value,
+      year: yearLevelInput.value,
+      industry: industryInput.value,
+      avatar: nameInput.value
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("") || "ST"
+    };
+
+    await FocusFlowShared.createLocalAccount({
+      username: usernameInput.value,
+      password: passwordInput.value,
+      profile
+    });
+
+    const savedData = FocusFlowShared.readStorage(
+      "focusflowDashboardData",
+      {}
+    );
+
+    FocusFlowShared.writeStorage("focusflowDashboardData", {
+      ...savedData,
+      profile,
+      tasks: Array.isArray(savedData.tasks) ? savedData.tasks : [],
+      progress: {
+        focusMinutesToday: 0,
+        dailyGoalMinutes: 60,
+        streak: 0,
+        ...(savedData.progress || {})
+      },
+      settings: {
+        ...(savedData.settings || {})
+      }
+    });
+
+    setSystemMessage(
+      "Account created securely. You can now log in with this username and password.",
+      "success"
+    );
+
+    window.setTimeout(() => {
+      window.location.href = "login.html";
+    }, 700);
+  } catch (error) {
+    setSystemMessage(
+      error?.message || "Your account could not be created in this browser.",
+      "error"
+    );
+  }
 });

@@ -741,3 +741,29 @@ body.dark-mode .danger-action {
     grid-template-columns: 1fr;
   }
 }
+
+/* Password and security feedback shown beside the action button. */
+.settings-inline-message {
+  min-height: 22px;
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.settings-inline-message.success {
+  color: #2f8a5b;
+}
+
+.settings-inline-message.error {
+  color: #c75353;
+}
+
+body.dark-mode .settings-inline-message.success {
+  color: #75d8a3;
+}
+
+body.dark-mode .settings-inline-message.error {
+  color: #f29a9a;
+}

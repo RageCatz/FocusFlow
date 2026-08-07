@@ -358,6 +358,49 @@ function togglePasswordVisibility() {
   });
 }
 
+function setPasswordSecurityMessage(message, type = "info") {
+  const element = document.getElementById("passwordSecurityMessage");
+  if (!element) return;
+
+  element.textContent = message;
+  element.className = `settings-inline-message ${type}`;
+}
+
+function renderPasswordSecurityState() {
+  const account = FocusFlowShared.getLocalAccount();
+  const currentField = document.getElementById("currentPasswordField");
+  const currentInput = document.getElementById("currentPassword");
+  const button = document.getElementById("changePasswordButton");
+
+  if (account?.passwordHash && account?.salt) {
+    if (currentField) currentField.hidden = false;
+    if (currentInput) currentInput.required = true;
+    if (button) button.textContent = "Change Password";
+    setPasswordSecurityMessage(
+      "Enter your current password before choosing a new one.",
+      "info"
+    );
+    return;
+  }
+
+  /*
+   * Older FocusFlow browser data can exist without a login credential.
+   * In that case there is no old password that can be safely verified,
+   * so the page switches to a one-time secure password setup instead.
+   */
+  if (currentField) currentField.hidden = true;
+  if (currentInput) {
+    currentInput.required = false;
+    currentInput.value = "";
+  }
+  if (button) button.textContent = "Set Password";
+
+  setPasswordSecurityMessage(
+    "This browser has older FocusFlow data but no saved login password. Set a password now; future changes will require the current password.",
+    "info"
+  );
+}
+
 function validatePassword(password) {
   return (
     password.length >= 6 &&
@@ -371,20 +414,27 @@ async function changePassword() {
   const newInput = document.getElementById("newPassword");
   const confirmInput = document.getElementById("confirmPassword");
   const button = document.getElementById("changePasswordButton");
+  const account = FocusFlowShared.getLocalAccount();
 
+  const hasCredential = Boolean(account?.passwordHash && account?.salt);
   const currentPassword = currentInput?.value || "";
   const newPassword = newInput?.value || "";
   const confirmation = confirmInput?.value || "";
 
-  if (!currentPassword) {
-    FocusFlowShared.showToast("Enter your current password.", "error");
+  setPasswordSecurityMessage("", "info");
+
+  if (hasCredential && !currentPassword) {
+    setPasswordSecurityMessage(
+      "Enter your current password.",
+      "error"
+    );
     currentInput?.focus();
     return;
   }
 
   if (!validatePassword(newPassword)) {
-    FocusFlowShared.showToast(
-      "New password needs at least 6 characters, 1 number, and letters or numbers only.",
+    setPasswordSecurityMessage(
+      "New password needs at least 6 characters, at least 1 number, and letters or numbers only.",
       "error"
     );
     newInput?.focus();
@@ -392,13 +442,16 @@ async function changePassword() {
   }
 
   if (newPassword !== confirmation) {
-    FocusFlowShared.showToast("New passwords do not match.", "error");
+    setPasswordSecurityMessage(
+      "The new passwords do not match.",
+      "error"
+    );
     confirmInput?.focus();
     return;
   }
 
-  if (currentPassword === newPassword) {
-    FocusFlowShared.showToast(
+  if (hasCredential && currentPassword === newPassword) {
+    setPasswordSecurityMessage(
       "Choose a new password that is different from your current password.",
       "error"
     );
@@ -409,29 +462,48 @@ async function changePassword() {
   try {
     if (button) {
       button.disabled = true;
-      button.textContent = "Changing Password…";
+      button.textContent = hasCredential
+        ? "Changing Password…"
+        : "Setting Password…";
     }
 
-    const result = await FocusFlowShared.changeLocalPassword(
-      currentPassword,
-      newPassword
-    );
+    if (!hasCredential) {
+      const username =
+        settingsData.profile.username ||
+        sessionStorage.getItem("focusflow_username") ||
+        "student";
 
-    if (!result.ok) {
-      if (result.reason === "no-account") {
-        FocusFlowShared.showToast(
-          "No local login account exists yet. Create your account through Sign Up first.",
-          "error"
-        );
-      } else {
-        FocusFlowShared.showToast(
-          "Your current password is incorrect.",
+      await FocusFlowShared.createLocalAccount({
+        username,
+        password: newPassword,
+        profile: settingsData.profile
+      });
+
+      setPasswordSecurityMessage(
+        "Password set successfully. You can now use it to log in.",
+        "success"
+      );
+    } else {
+      const result = await FocusFlowShared.changeLocalPassword(
+        currentPassword,
+        newPassword
+      );
+
+      if (!result.ok) {
+        setPasswordSecurityMessage(
+          result.reason === "incorrect-password"
+            ? "Your current password is incorrect."
+            : "The password could not be changed.",
           "error"
         );
         currentInput?.focus();
+        return;
       }
 
-      return;
+      setPasswordSecurityMessage(
+        "Password changed successfully. Use the new password next time you log in.",
+        "success"
+      );
     }
 
     [currentInput, newInput, confirmInput].forEach(input => {
@@ -441,22 +513,23 @@ async function changePassword() {
       }
     });
 
-    const showPasswords = document.getElementById("showSettingsPasswords");
+    const showPasswords =
+      document.getElementById("showSettingsPasswords");
     if (showPasswords) showPasswords.checked = false;
 
-    FocusFlowShared.showToast(
-      "Password changed successfully. Use the new password next time you log in.",
-      "success"
-    );
+    renderPasswordSecurityState();
   } catch (error) {
-    FocusFlowShared.showToast(
-      error?.message || "Password could not be changed in this browser.",
+    setPasswordSecurityMessage(
+      error?.message ||
+        "Password security is unavailable in this browser context.",
       "error"
     );
   } finally {
     if (button) {
       button.disabled = false;
-      button.textContent = "Change Password";
+      button.textContent = FocusFlowShared.getLocalAccount()
+        ? "Change Password"
+        : "Set Password";
     }
   }
 }
@@ -650,6 +723,25 @@ function initializeSettingsPage() {
   renderSettingCheckboxes();
   renderSoundSettings();
   applyThemePreference(getThemePreference(), { save: false });
+
+  FocusFlowShared.connectPageChrome({
+    getTasks: () => settingsData.tasks,
+    getSettings: () => settings,
+    setSettings: nextSettings => {
+      settings = {
+        ...settings,
+        ...nextSettings
+      };
+
+      saveSharedData();
+      renderSettingCheckboxes();
+    },
+    afterSettingChange: () => {
+      FocusFlowShared.applyAppSettings(settings);
+      renderSettingCheckboxes();
+    }
+  });
+
   connectControls();
 }
 
