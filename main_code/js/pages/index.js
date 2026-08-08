@@ -1,5 +1,6 @@
 "use strict";
 
+/* Dashboard data and defaults */
 const DASHBOARD_KEY = "focusflowDashboardData";
 const SETTINGS_KEY = "focusflowDashboardSettings";
 const NOTIFICATIONS_KEY = "focusflowNotifications";
@@ -20,6 +21,7 @@ const checkIcon = `
   </svg>
 `;
 
+/* Date helpers */
 function localDate(daysFromToday = 0) {
   const date = new Date();
   date.setDate(date.getDate() + daysFromToday);
@@ -31,6 +33,7 @@ function localDate(daysFromToday = 0) {
   return `${year}-${month}-${day}`;
 }
 
+/* Data loading and persistence */
 function createDefaultData() {
   return {
     profile: {
@@ -80,6 +83,7 @@ function saveData() {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(dashboardData.settings));
 }
 
+/* Dashboard formatting and rendering */
 function formatDate(dateString) {
   if (!dateString) return "No date";
 
@@ -176,161 +180,17 @@ function toggleTask(taskId) {
   );
 }
 
-function createNotifications() {
-  const savedNotifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
-  const readIds = new Set(
-    savedNotifications
-      .filter(notification => notification.read)
-      .map(notification => String(notification.id))
-  );
-
-  const today = localDate();
-  const tomorrow = localDate(1);
-
-  const notifications = [
-    {
-      id: "welcome",
-      title: "Welcome",
-      text: "Welcome back to FocusFlow. Have a great study session today.",
-      read: readIds.has("welcome")
-    }
-  ];
-
-  dashboardData.tasks.forEach(task => {
-    if (task.status === "done" || !task.dueDate) return;
-
-    if (task.dueDate < today) {
-      const id = `overdue-${task.id}-${today}`;
-      notifications.push({
-        id,
-        title: "Overdue task",
-        text: `${task.name} was due ${formatDate(task.dueDate)}.`,
-        read: readIds.has(id)
-      });
-    }
-
-    if (task.dueDate === tomorrow) {
-      const id = `upcoming-${task.id}-${today}`;
-      notifications.push({
-        id,
-        title: "Task due tomorrow",
-        text: `${task.name} is due tomorrow.`,
-        read: readIds.has(id)
-      });
-    }
-  });
-
-  localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
-  return notifications;
-}
-
-function renderNotifications() {
-  const notificationList = document.getElementById("notificationList");
-  const notificationDot = document.getElementById("notificationDot");
-  const notificationSubtitle = document.getElementById("notificationSubtitle");
-  const markAllButton = document.getElementById("clearNotifications");
-
-  const notificationsEnabled = dashboardData.settings.notifications;
-  const notifications = createNotifications();
-  const unreadCount = notifications.filter(notification => !notification.read).length;
-
-  notificationDot.hidden = !notificationsEnabled || unreadCount === 0;
-  markAllButton.hidden = !notificationsEnabled || unreadCount === 0;
-
-  if (!notificationsEnabled) {
-    notificationSubtitle.textContent = "Notifications are turned off.";
-    notificationList.innerHTML = `
-      <div class="notify-empty">
-        Notifications are turned off in Quick Settings.
-      </div>
-    `;
-    return;
-  }
-
-  notificationSubtitle.textContent = unreadCount
-    ? `${unreadCount} unread update${unreadCount === 1 ? "" : "s"}.`
-    : "You are all caught up.";
-
-  notificationList.innerHTML = notifications.map(notification => `
-    <button
-      class="notification-item ${notification.read ? "read" : "unread"}"
-      type="button"
-      data-notification-id="${FocusFlowShared.escapeHtml(notification.id)}"
-    >
-      <span class="notification-mark"></span>
-      <span class="notification-copy">
-        <span class="notification-title">${FocusFlowShared.escapeHtml(notification.title)}</span>
-        <span class="notification-text">${FocusFlowShared.escapeHtml(notification.text)}</span>
-        <span class="notification-meta">
-          Just now${notification.read ? " • Read" : ""}
-        </span>
-      </span>
-    </button>
-  `).join("");
-
-  notificationList.querySelectorAll("[data-notification-id]").forEach(button => {
-    button.addEventListener("click", () => {
-      markNotificationRead(button.dataset.notificationId);
-    });
-  });
-}
-
-function markNotificationRead(notificationId) {
-  const notifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
-
-  notifications.forEach(notification => {
-    if (String(notification.id) === String(notificationId)) {
-      notification.read = true;
-    }
-  });
-
-  localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
-  renderNotifications();
-}
-
-function markAllNotificationsRead() {
-  const notifications = FocusFlowShared.readStorage(NOTIFICATIONS_KEY, []);
-
-  notifications.forEach(notification => {
-    notification.read = true;
-  });
-
-  localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
-  renderNotifications();
-  FocusFlowShared.showToast("All notifications marked as read", "success");
-}
-
+/* Shared application settings */
 function applySettings() {
-  FocusFlowShared.applyBodyTheme(dashboardData.settings.darkMode);
-  document.body.classList.toggle("focus-mode", dashboardData.settings.focusMode);
-  FocusFlowShared.syncToggleButtons(dashboardData.settings);
+  FocusFlowShared.applyAppSettings(dashboardData.settings);
 }
 
-function toggleSetting(settingName) {
-  dashboardData.settings[settingName] = !dashboardData.settings[settingName];
+let dashboardHeader = null;
 
-  saveData();
-  applySettings();
-  renderDashboard();
-
-  const labels = {
-    focusMode: "Focus mode",
-    notifications: "Notifications",
-    soundAlerts: "Sound alerts",
-    darkMode: "Dark mode",
-    autoStartBreaks: "Auto start breaks",
-    showStatsOnHome: "Dashboard stats"
-  };
-
-  FocusFlowShared.showToast(
-    `${labels[settingName]} ${dashboardData.settings[settingName] ? "enabled" : "disabled"}`,
-    "info"
-  );
-}
-
+/* Main dashboard refresh */
 function renderDashboard() {
   renderTasks();
-  renderNotifications();
+  dashboardHeader?.renderNotifications?.();
 
   const completedTasks = dashboardData.tasks.filter(task => task.status === "done").length;
   const focusMinutes = Number(dashboardData.progress.focusMinutesToday || 0);
@@ -348,43 +208,33 @@ function renderDashboard() {
   });
 }
 
-const panelController = FocusFlowShared.createPanelController(
-  ["notifyPanel", "quickSettings", "profilePanel", "sidebarProfilePanel"],
-  {
-    expandedButtonId: "sidebarUser",
-    expandedPanelId: "sidebarProfilePanel"
-  }
-);
-
 function wireEvents() {
-  panelController.connectButton("notifyBtn", "notifyPanel");
-  panelController.connectButton("quickSettingsBtn", "quickSettings");
-  panelController.connectButton("profileBtn", "profilePanel");
-  panelController.connectButton("sidebarUser", "sidebarProfilePanel");
-
-  document.getElementById("clearNotifications")?.addEventListener(
-    "click",
-    markAllNotificationsRead
-  );
+  dashboardHeader = FocusFlowShared.connectDashboardHeader({
+    getTasks: () => dashboardData.tasks,
+    getSettings: () => dashboardData.settings,
+    setSettings: nextSettings => {
+      dashboardData.settings = { ...dashboardData.settings, ...nextSettings };
+      saveData();
+    },
+    afterSettingChange: () => {
+      applySettings();
+      renderDashboard();
+    },
+    panelIds: ["notifyPanel", "quickSettings", "profilePanel", "sidebarProfilePanel"],
+    panelControllerOptions: {
+      expandedButtonId: "sidebarUser",
+      expandedPanelId: "sidebarProfilePanel"
+    },
+    buttonPanelPairs: [
+      ["notifyBtn", "notifyPanel"],
+      ["quickSettingsBtn", "quickSettings"],
+      ["profileBtn", "profilePanel"],
+      ["sidebarUser", "sidebarProfilePanel"]
+    ]
+  });
 
   document.getElementById("quickAddTask")?.addEventListener("click", () => {
     window.location.href = "tasks.html";
-  });
-
-  document.getElementById("logoutBtn")?.addEventListener("click", FocusFlowShared.logout);
-  document.getElementById("sidebarLogoutBtn")?.addEventListener("click", FocusFlowShared.logout);
-
-  document.querySelectorAll("[data-toggle]").forEach(button => {
-    button.addEventListener("click", event => {
-      event.stopPropagation();
-      toggleSetting(button.dataset.toggle);
-    });
-  });
-
-  document.addEventListener("click", () => panelController.close());
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") panelController.close();
   });
 }
 

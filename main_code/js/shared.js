@@ -1,7 +1,7 @@
 "use strict";
 
 /* =====================================================
-   Shared utilities
+   Core shared utilities
 ===================================================== */
 window.FocusFlowShared = {
   readStorage(key, fallbackValue) {
@@ -148,8 +148,223 @@ window.FocusFlowShared = {
   }
 };
 
+
+
 /* =====================================================
-   Shared header used by non-dashboard pages
+   Shared Dashboard and Tasks application controls
+   Handles settings, notifications, and header popups.
+===================================================== */
+FocusFlowShared.SETTINGS_KEY = "focusflowDashboardSettings";
+FocusFlowShared.NOTIFICATIONS_KEY = "focusflowNotifications";
+FocusFlowShared.DEFAULT_SETTINGS = {
+  focusMode: false,
+  notifications: true,
+  soundAlerts: true,
+  darkMode: false,
+  autoStartBreaks: true,
+  showStatsOnHome: true,
+  focusDuration: 25
+};
+
+FocusFlowShared.formatStudyDate = function (dateString) {
+  if (!dateString) return "No date";
+  const date = new Date(`${dateString}T00:00:00`);
+  return new Intl.DateTimeFormat("en-NZ", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+};
+
+FocusFlowShared.applyAppSettings = function (settings) {
+  const current = { ...this.DEFAULT_SETTINGS, ...(settings || {}) };
+
+  this.applyBodyTheme(current.darkMode);
+  document.body.classList.toggle("focus-mode", Boolean(current.focusMode));
+  document.body.classList.toggle("notifications-disabled", current.notifications === false);
+  document.body.classList.toggle("hide-home-stats", current.showStatsOnHome === false);
+  document.documentElement.dataset.theme = current.darkMode ? "dark" : "light";
+  this.syncToggleButtons(current);
+};
+
+FocusFlowShared.buildTaskNotifications = function (tasks = []) {
+  const saved = this.readStorage(this.NOTIFICATIONS_KEY, []);
+  const readIds = new Set(
+    saved.filter(item => item.read).map(item => String(item.id))
+  );
+
+  const localDate = offsetDays => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + (offsetDays || 0));
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
+  const today = localDate(0);
+  const tomorrow = localDate(1);
+  const notifications = [{
+    id: "welcome",
+    title: "Welcome",
+    text: "Welcome back to FocusFlow. Have a great study session today.",
+    read: readIds.has("welcome")
+  }];
+
+  tasks.forEach(task => {
+    if (task.status === "done" || !task.dueDate) return;
+
+    if (task.dueDate < today) {
+      const id = `overdue-${task.id}-${today}`;
+      notifications.push({
+        id,
+        title: "Overdue task",
+        text: `${task.name} was due ${this.formatStudyDate(task.dueDate)}.`,
+        read: readIds.has(id)
+      });
+    }
+
+    if (task.dueDate === tomorrow) {
+      const id = `upcoming-${task.id}-${today}`;
+      notifications.push({
+        id,
+        title: "Task due tomorrow",
+        text: `${task.name} is due tomorrow.`,
+        read: readIds.has(id)
+      });
+    }
+  });
+
+  this.writeStorage(this.NOTIFICATIONS_KEY, notifications);
+  return notifications;
+};
+
+FocusFlowShared.renderHeaderNotifications = function (tasks, settings) {
+  const list = document.getElementById("notificationList");
+  const dot = document.getElementById("notificationDot");
+  const subtitle = document.getElementById("notificationSubtitle");
+  const markAll = document.getElementById("clearNotifications");
+  if (!list || !dot || !subtitle || !markAll) return;
+
+  const enabled = settings?.notifications !== false;
+  const notifications = this.buildTaskNotifications(tasks);
+  const unread = notifications.filter(item => !item.read).length;
+
+  dot.hidden = !enabled || unread === 0;
+  markAll.hidden = !enabled || unread === 0;
+
+  if (!enabled) {
+    subtitle.textContent = "Notifications are turned off.";
+    list.innerHTML = '<div class="notify-empty">Notifications are turned off in Quick Settings.</div>';
+    return;
+  }
+
+  subtitle.textContent = unread
+    ? `${unread} unread update${unread === 1 ? "" : "s"}.`
+    : "You are all caught up.";
+
+  list.innerHTML = notifications.map(item => `
+    <button class="notification-item ${item.read ? "read" : "unread"}"
+      type="button" data-shared-notification-id="${this.escapeHtml(item.id)}">
+      <span class="notification-mark"></span>
+      <span class="notification-copy">
+        <span class="notification-title">${this.escapeHtml(item.title)}</span>
+        <span class="notification-text">${this.escapeHtml(item.text)}</span>
+        <span class="notification-meta">Just now${item.read ? " • Read" : ""}</span>
+      </span>
+    </button>
+  `).join("");
+};
+
+FocusFlowShared.markHeaderNotificationRead = function (notificationId) {
+  const notifications = this.readStorage(this.NOTIFICATIONS_KEY, []);
+  notifications.forEach(item => {
+    if (String(item.id) === String(notificationId)) item.read = true;
+  });
+  this.writeStorage(this.NOTIFICATIONS_KEY, notifications);
+};
+
+FocusFlowShared.markAllHeaderNotificationsRead = function () {
+  const notifications = this.readStorage(this.NOTIFICATIONS_KEY, []);
+  notifications.forEach(item => { item.read = true; });
+  this.writeStorage(this.NOTIFICATIONS_KEY, notifications);
+};
+
+FocusFlowShared.connectDashboardHeader = function (options = {}) {
+  const getTasks = options.getTasks || (() => []);
+  const getSettings = options.getSettings || (() => ({ ...this.DEFAULT_SETTINGS }));
+  const setSettings = options.setSettings || (() => {});
+  const afterSettingChange = options.afterSettingChange || (() => {});
+  const panelIds = options.panelIds || ["notifyPanel", "quickSettings", "profilePanel"];
+  const labels = {
+    focusMode: "Focus mode",
+    notifications: "Notifications",
+    soundAlerts: "Sound alerts",
+    darkMode: "Dark mode",
+    autoStartBreaks: "Auto start breaks",
+    showStatsOnHome: "Dashboard stats"
+  };
+
+  const controller = this.createPanelController(panelIds, options.panelControllerOptions || {});
+  const renderNotifications = () => this.renderHeaderNotifications(getTasks(), getSettings());
+
+  const buttonPanelPairs = options.buttonPanelPairs || [
+    ["notifyBtn", "notifyPanel"],
+    ["quickSettingsBtn", "quickSettings"],
+    ["profileBtn", "profilePanel"]
+  ];
+  buttonPanelPairs.forEach(([buttonId, panelId]) => controller.connectButton(buttonId, panelId));
+
+  document.getElementById("notifyBtn")?.addEventListener("click", renderNotifications);
+  document.getElementById("notificationList")?.addEventListener("click", event => {
+    const button = event.target.closest("[data-shared-notification-id]");
+    if (!button) return;
+    event.stopPropagation();
+    this.markHeaderNotificationRead(button.dataset.sharedNotificationId);
+    renderNotifications();
+  });
+  document.getElementById("clearNotifications")?.addEventListener("click", event => {
+    event.stopPropagation();
+    this.markAllHeaderNotificationsRead();
+    renderNotifications();
+    this.showToast("All notifications marked as read", "success");
+  });
+
+  document.getElementById("logoutBtn")?.addEventListener("click", this.logout);
+  document.getElementById("sidebarLogoutBtn")?.addEventListener("click", this.logout);
+
+  document.querySelectorAll("[data-toggle]").forEach(button => {
+    button.addEventListener("click", event => {
+      event.stopPropagation();
+      const name = button.dataset.toggle;
+      const next = { ...getSettings(), [name]: !Boolean(getSettings()?.[name]) };
+      setSettings(next);
+      this.writeStorage(this.SETTINGS_KEY, next);
+      this.applyAppSettings(next);
+      renderNotifications();
+      afterSettingChange(name, next);
+      this.showToast(`${labels[name] || name} ${next[name] ? "enabled" : "disabled"}`, "info");
+    });
+  });
+
+  document.addEventListener("click", () => {
+    controller.close();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") controller.close();
+  });
+
+  this.applyAppSettings(getSettings());
+  renderNotifications();
+  return { controller, renderNotifications };
+};
+
+
+/* =====================================================
+   Legacy header helper (currently inactive)
+   Kept for the unfinished Focus, Break, Progress, and Settings pages.
 ===================================================== */
 function initialiseSharedHeader() {
   const notificationButton = document.querySelector("[data-notification-button]");
@@ -358,5 +573,3 @@ function initialiseSharedHeader() {
   applyTheme(savedTheme === "dark" ? "dark" : "light");
   renderNotifications();
 }
-
-document.addEventListener("DOMContentLoaded", initialiseSharedHeader);

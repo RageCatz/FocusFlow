@@ -104,17 +104,18 @@ textarea:focus-visible {
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .navigation-link {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 13px 14px;
-  border-radius: 14px;
+  padding: 14px 14px;
+  border-radius: 16px;
   color: #33405f;
+  font-size: 16px;
   font-weight: 700;
   transition:
     background 0.18s ease,
@@ -126,8 +127,8 @@ textarea:focus-visible {
 }
 
 .navigation-link.active {
-  background: var(--primary-soft);
-  color: #4254b7;
+  background: #dfe7ff;
+  color: #33405f;
 }
 
 .navigation-link svg {
@@ -504,4 +505,206 @@ textarea:focus-visible {
   height:46px;
   object-fit:contain;
   border-radius:14px;
+}
+
+
+/* =====================================================
+   Shared Dashboard-style header controls and popovers
+   Used by Dashboard/Tasks now and reusable by other pages.
+===================================================== */
+.dashboard-header-actions,
+.topbar-actions {
+  --panel: var(--surface);
+  --line: var(--border);
+  --muted: var(--text-secondary);
+  --shadow: 0 18px 45px rgba(31, 42, 68, 0.16);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  border: 1px solid var(--line, var(--border));
+  background: var(--panel, var(--surface));
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 8px 16px rgba(33, 51, 95, 0.05);
+  padding: 0;
+}
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn.disabled-notify { opacity: 0.6; }
+
+.badge-dot {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff9f43;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 4px rgba(255, 159, 67, 0.16);
+}
+.badge-dot[hidden] { display: none !important; }
+
+.profile-panel,
+.notify-panel,
+.quick-settings {
+  position: absolute;
+  right: 0;
+  top: 58px;
+  width: 340px;
+  background: var(--panel, var(--surface));
+  border: 1px solid var(--line, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--shadow, 0 18px 45px rgba(31, 42, 68, 0.16));
+  padding: 16px;
+  display: none;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+}
+.profile-panel.open,
+.notify-panel.open,
+.quick-settings.open {
+  display: block;
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.panel-title { font-weight: 800; font-size: 18px; margin-bottom: 10px; }
+.notify-panel { padding: 0; overflow: hidden; }
+.quick-settings { max-height: 360px; overflow-y: auto; overflow-x: hidden; }
+.notify-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #eef2fb;
+  background: linear-gradient(180deg, #fafcff 0%, #f5f8ff 100%);
+}
+.notify-sub { font-size: 13px; color: var(--muted, var(--text-secondary)); margin-top: 3px; }
+.notify-list { max-height: 320px; overflow-y: auto; overflow-x: hidden; padding: 6px 0; scroll-behavior: smooth; }
+.notification-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid #eef2fb;
+  background: var(--panel, var(--surface));
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.18s;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+.notification-item:hover { background: #f6f9ff; }
+.notification-item:last-child { border-bottom: 0; }
+.notification-item.unread { background: #f4f7ff; }
+.notification-mark {
+  width: 10px; height: 10px; border-radius: 50%; background: #ff9f43;
+  flex: 0 0 10px; margin-top: 7px; box-shadow: 0 0 0 4px rgba(255,159,67,.14);
+}
+.notification-item.read .notification-mark { background: #d7dfef; box-shadow: none; }
+.notification-copy { flex: 1; }
+.notification-title { display:block; font-weight: 800; font-size: 15px; line-height: 1.25; }
+.notification-text { display:block; color: var(--muted, var(--text-secondary)); font-size: 13px; line-height: 1.45; margin-top: 3px; }
+.notification-meta { display:block; color: #8c98b5; font-size: 12px; margin-top: 6px; }
+.notify-foot { padding: 12px 16px; border-top: 1px solid #eef2fb; background: #fbfcff; }
+.notify-empty { padding: 24px 18px; text-align: center; color: var(--muted, var(--text-secondary)); }
+
+.toggle { display:flex; align-items:center; justify-content:space-between; padding:16px 0; border-bottom:1px solid #edf1fb; gap:14px; }
+.toggle:last-child { border-bottom: 0; }
+.toggle .muted { color: var(--muted, var(--text-secondary)); font-size: 14px; margin-top: 3px; }
+.switch {
+  width: 56px; height: 32px; flex: 0 0 56px; border-radius:999px; background:#d9e2fb;
+  position:relative; cursor:pointer; transition:.2s; border:0; padding:0;
+}
+.switch::after {
+  content:""; position:absolute; top:4px; left:4px; width:24px; height:24px; border-radius:50%;
+  background:var(--panel, var(--surface)); box-shadow:0 4px 10px rgba(0,0,0,.08); transition:.2s;
+}
+.switch.on { background:#7b89ff; }
+.switch.on::after { left:28px; }
+
+.profile-heading-row { display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+.profile-large-name { font-weight:900; font-size:20px; }
+.profile-detail-lines { line-height:1.8; }
+.profile-actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+.profile-panel .label { font-size:12px; font-weight:800; color:var(--muted, var(--text-secondary)); text-transform:uppercase; }
+.secondary-btn,
+.danger-btn {
+  border-radius:16px; padding:14px 18px; font-weight:800; cursor:pointer;
+  display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+}
+.secondary-btn { background:#f3f6ff; color:#30406b; border:1px solid var(--line, var(--border)); }
+.danger-btn { background:var(--panel, var(--surface)); color:#c14e4e; border:1px solid #f2c8c8; }
+#clearNotifications { padding:10px 12px; border-radius:12px; }
+.switch:focus-visible,.icon-btn:focus-visible,.notification-item:focus-visible { outline:3px solid rgba(111,128,255,.32); outline-offset:2px; }
+
+body.dark-mode .notify-panel { background:var(--panel, var(--surface)); color:var(--text); border-color:var(--line, var(--border)); }
+body.dark-mode .notify-panel .notify-head,
+body.dark-mode .notify-panel .notify-foot { background:#131c2c; border-color:var(--line, var(--border)); }
+body.dark-mode .notify-panel .notification-item { background:var(--panel, var(--surface)); color:var(--text); border-color:var(--line, var(--border)); }
+body.dark-mode .notify-panel .notification-item:hover { background:#1f2a3d; }
+body.dark-mode .notify-panel .notification-item.unread { background:#222d43; }
+body.dark-mode .notify-panel .notification-title { color:var(--text); }
+body.dark-mode .quick-settings,
+body.dark-mode .profile-panel { background:var(--panel, var(--surface)); color:var(--text); border-color:var(--line, var(--border)); }
+body.dark-mode .toggle { border-color:var(--line, var(--border)); }
+body.dark-mode .secondary-btn { background:#202b3d; color:var(--text); border-color:var(--line, var(--border)); }
+body.dark-mode .danger-btn { background:var(--panel, var(--surface)); }
+body.dark-mode .badge-dot { border-color:var(--panel, var(--surface)); }
+
+@media (max-width: 680px) {
+  .profile-panel,.notify-panel,.quick-settings { position:fixed; right:14px; left:14px; top:82px; width:auto; max-width:none; }
+}
+
+/* Shared Dashboard sidebar colours for pages using .navigation/.navigation-link. */
+body.dark-mode .sidebar,
+:root[data-theme="dark"] .sidebar {
+  background: linear-gradient(180deg, #0f1728 0%, #152033 100%);
+  border-right-color: #27324a;
+}
+body.dark-mode .navigation-link,
+:root[data-theme="dark"] .navigation-link {
+  color: #dbe6ff;
+}
+body.dark-mode .navigation-link:hover,
+:root[data-theme="dark"] .navigation-link:hover {
+  background: #202b43;
+  color: #dbe6ff;
+}
+body.dark-mode .navigation-link.active,
+:root[data-theme="dark"] .navigation-link.active {
+  background: #293656;
+  color: #dbe6ff;
+}
+
+
+/* =====================================================
+   Shared setting effects
+===================================================== */
+body.focus-mode .sidebar {
+  display: none !important;
+}
+
+body.focus-mode .app-layout {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+body.notifications-disabled .badge-dot {
+  display: none !important;
 }
