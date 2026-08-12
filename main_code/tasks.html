@@ -182,7 +182,8 @@
 <div class="task-entry-grid">
 <div class="field task-name-field">
 <label for="taskName">Task</label>
-<input id="taskName" placeholder="e.g. Biology revision" type="text"/>
+<input aria-describedby="taskNameError" id="taskName" placeholder="e.g. Biology revision" type="text"/>
+<p aria-live="polite" class="field-error" id="taskNameError" hidden>Please enter a task before saving.</p>
 </div>
 <div class="field">
 <label for="taskDate">Due date</label>

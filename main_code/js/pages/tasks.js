@@ -416,14 +416,38 @@ function addTask() {
   const nameInput = document.getElementById("taskName");
   const dateInput = document.getElementById("taskDate");
   const priorityInput = document.getElementById("taskPriority");
+  const nameError = document.getElementById("taskNameError");
 
   const name = nameInput.value.trim();
   const dueDate = dateInput.value;
   const priority = priorityInput.value;
 
+  // Clear any previous task-name validation before checking the new input.
+  nameInput.classList.remove("input-error");
+  nameInput.removeAttribute("aria-invalid");
+  if (nameError) nameError.hidden = true;
+
+  if (!name) {
+    nameInput.classList.add("input-error");
+    nameInput.setAttribute("aria-invalid", "true");
+    if (nameError) {
+      nameError.textContent = "Please enter a task before saving.";
+      nameError.hidden = false;
+    }
+    FocusFlowShared.showToast("Please enter a task before saving.", "error");
+    nameInput.focus();
+    return;
+  }
+
   if (name.length < 2) {
+    nameInput.classList.add("input-error");
+    nameInput.setAttribute("aria-invalid", "true");
+    if (nameError) {
+      nameError.textContent = "Task names must contain at least 2 characters.";
+      nameError.hidden = false;
+    }
     FocusFlowShared.showToast(
-      "Enter a task name with at least 2 characters.",
+      "Task names must contain at least 2 characters.",
       "error"
     );
     nameInput.focus();
@@ -649,6 +673,17 @@ function connectPageControls() {
 
   document.getElementById("taskName")?.addEventListener("keydown", event => {
     if (event.key === "Enter") addTask();
+  });
+
+  document.getElementById("taskName")?.addEventListener("input", event => {
+    const input = event.currentTarget;
+    if (!input.value.trim()) return;
+
+    input.classList.remove("input-error");
+    input.removeAttribute("aria-invalid");
+
+    const error = document.getElementById("taskNameError");
+    if (error) error.hidden = true;
   });
 
   document.getElementById("cancelDeleteButton")?.addEventListener(

@@ -150,6 +150,23 @@
   outline: 3px solid rgba(102, 117, 245, 0.14);
 }
 
+.field input.input-error {
+  border-color: #d64b4b;
+  background: #fff8f8;
+}
+
+.field input.input-error:focus {
+  border-color: #d64b4b;
+  outline: 3px solid rgba(214, 75, 75, 0.14);
+}
+
+.field-error {
+  margin: 6px 0 0;
+  color: #c63d3d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .primary-action,
 .secondary-action,
 .danger-action {
