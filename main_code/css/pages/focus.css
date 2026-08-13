@@ -1081,3 +1081,12 @@ body.dark-mode .timer-alarm-icon {
   }
 
 }
+
+/* Allow page content to shrink safely inside the responsive grid. */
+@media (max-width: 680px) {
+  .page-header > *,
+  .card,
+  main {
+    min-width: 0;
+  }
+}

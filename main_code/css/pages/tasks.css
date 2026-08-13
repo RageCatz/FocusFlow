@@ -1122,3 +1122,11 @@ body.dark-mode .tasks-switch.on {
     gap: 2px;
   }
 }
+/* Allow page content to shrink safely inside the responsive grid. */
+@media (max-width: 680px) {
+  .page-header > *,
+  .card,
+  main {
+    min-width: 0;
+  }
+}

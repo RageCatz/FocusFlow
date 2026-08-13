@@ -319,3 +319,26 @@
     grid-column: auto;
   }
 }
+/* Extra-small and landscape responsive safeguards. */
+@media (max-width: 380px) {
+  .signup-shell {
+    width: calc(100% - 12px);
+    margin: 8px auto;
+  }
+
+  .signup-hero,
+  .signup-form-section {
+    padding: 18px;
+  }
+
+  .signup-hero > h2 {
+    font-size: 29px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .signup-shell {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

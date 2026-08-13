@@ -713,3 +713,11 @@ body.dark-mode .danger-reset-button {
     grid-template-columns: 1fr;
   }
 }
+/* Allow page content to shrink safely inside the responsive grid. */
+@media (max-width: 680px) {
+  .page-header > *,
+  .card,
+  main {
+    min-width: 0;
+  }
+}

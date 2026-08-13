@@ -1914,3 +1914,232 @@ body.dark-mode .notify-panel .secondary-btn {
 html {
   scrollbar-gutter: stable;
 }
+
+/* Cross-device responsive safety net for the Dashboard shell. */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.app-card,
+.app-card > *,
+.main,
+.topbar > * {
+  min-width: 0;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+@supports (height: 100dvh) {
+  .page-shell,
+  .app-card,
+  .main,
+  .sidebar {
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 850px) {
+  .app-card {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .brand > div:not(.logo),
+  .nav a span,
+  .user-meta {
+    display: none;
+  }
+
+  .brand,
+  .nav a,
+  .user-card {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-card {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding: 12px 7px;
+  }
+
+  .main {
+    padding: 16px;
+  }
+
+  .topbar {
+    gap: 12px;
+  }
+
+  .topbar h2 {
+    font-size: clamp(30px, 9vw, 36px);
+  }
+
+  .logo,
+  .logo-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav a {
+    padding: 11px 8px;
+    border-radius: 15px;
+  }
+
+  .profile-panel,
+  .notify-panel,
+  .quick-settings {
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    flex-direction: column;
+  }
+
+  .top-actions {
+    align-self: flex-end;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .sidebar {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .brand {
+    padding-top: 4px;
+    padding-bottom: 8px;
+  }
+
+  .nav {
+    gap: 3px;
+  }
+
+  .nav a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
+/* Match the Dashboard sidebar to the shared icon-only sidebar on smaller screens. */
+@media (max-width: 850px) {
+  .app-card {
+    grid-template-columns: 76px minmax(0, 1fr) !important;
+  }
+
+  .app-card > .sidebar {
+    width: 76px !important;
+    min-width: 76px !important;
+    padding: 18px 10px !important;
+    overflow-x: hidden;
+  }
+
+  .app-card > .sidebar .brand,
+  .app-card > .sidebar .user-card {
+    display: none !important;
+  }
+
+  .app-card > .sidebar .nav {
+    margin-top: 0 !important;
+    gap: 8px;
+  }
+
+  .app-card > .sidebar .nav a {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 13px 8px !important;
+  }
+
+  .app-card > .sidebar .nav a span,
+  .app-card > .sidebar .user-meta,
+  .app-card > .sidebar .brand > div:not(.logo) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .app-card {
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+  }
+
+  .app-card > .sidebar {
+    width: 64px !important;
+    min-width: 64px !important;
+    padding: 12px 7px !important;
+  }
+
+  .app-card > .sidebar .nav a {
+    min-height: 48px;
+    padding: 11px 8px !important;
+    border-radius: 15px;
+  }
+
+  .app-card > .sidebar .nav svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+
+/* Keep Dashboard's compact rail identical to the shared page rail. */
+@media (max-width: 850px) {
+  .app-card {
+    grid-template-columns: 76px minmax(0, 1fr) !important;
+  }
+
+  .app-card > .sidebar {
+    width: 76px !important;
+    min-width: 76px !important;
+    flex: 0 0 76px !important;
+    padding: 18px 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .app-card > .sidebar .nav {
+    width: 100% !important;
+    margin-top: 0 !important;
+    gap: 8px !important;
+  }
+
+  .app-card > .sidebar .nav a {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 13px 8px !important;
+    border-radius: 15px !important;
+  }
+
+  .app-card > .sidebar .nav svg {
+    width: 20px !important;
+    height: 20px !important;
+    flex: 0 0 20px !important;
+  }
+}

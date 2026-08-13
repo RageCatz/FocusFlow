@@ -307,3 +307,26 @@
     width: 100%;
   }
 }
+/* Extra-small and landscape responsive safeguards. */
+@media (max-width: 380px) {
+  .login-shell {
+    width: calc(100% - 12px);
+    margin: 8px auto;
+  }
+
+  .login-hero,
+  .login-form-section {
+    padding: 18px;
+  }
+
+  .login-hero > h2 {
+    font-size: 29px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .login-shell {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
