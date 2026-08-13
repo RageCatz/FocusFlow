@@ -1,11 +1,7 @@
 module.exports = async function handler(request, response) {
-  const renderBaseUrl = process.env.RENDER_API_URL;
-
-  if (!renderBaseUrl) {
-    return response.status(503).json({
-      error: "RENDER_API_URL is not configured in Vercel."
-    });
-  }
+  const renderBaseUrl =
+    process.env.RENDER_API_URL ||
+    "https://focusflow-api-7h1f.onrender.com";
 
   const rawPath = String(request.query.path || "").replace(/^\/+/, "");
   if (!rawPath || rawPath.includes("..")) {

@@ -93,7 +93,7 @@ function renderProfileForm() {
   if (avatar) avatar.textContent = profile.avatar;
 }
 
-function saveProfile() {
+async function saveProfile() {
   const name = getInputValue("fullName");
   const username = getInputValue("username");
   const country = getInputValue("country");
@@ -131,15 +131,43 @@ function saveProfile() {
     avatar: buildAvatar(name)
   };
 
-  saveSharedData();
+  try {
+    if (FocusFlowShared.isCloudMode()) {
+      const currentUsername =
+        sessionStorage.getItem("focusflow_username") || "";
 
-  FocusFlowShared.updateLocalAccountUsername(
-    username,
-    settingsData.profile
-  );
+      if (username.toLowerCase() !== currentUsername.toLowerCase()) {
+        const result = await FocusFlowShared.apiRequest(
+          "auth/change-username",
+          {
+            method: "POST",
+            body: { username }
+          }
+        );
 
-  renderProfileForm();
-  FocusFlowShared.showToast("Profile changes saved.", "success");
+        sessionStorage.setItem("focusflow_username", result.username);
+        const currentUser = FocusFlowShared.readStorage(
+          "focusflowCurrentUser",
+          null
+        );
+        if (currentUser) currentUser.username = result.username;
+      }
+    } else {
+      FocusFlowShared.updateLocalAccountUsername(
+        username,
+        settingsData.profile
+      );
+    }
+
+    saveSharedData();
+    renderProfileForm();
+    FocusFlowShared.showToast("Profile changes saved.", "success");
+  } catch (error) {
+    FocusFlowShared.showToast(
+      error?.message || "Profile changes could not be saved.",
+      "error"
+    );
+  }
 }
 
 function getThemePreference() {
@@ -371,8 +399,11 @@ function renderPasswordSecurityState() {
   const currentField = document.getElementById("currentPasswordField");
   const currentInput = document.getElementById("currentPassword");
   const button = document.getElementById("changePasswordButton");
+  const hasCloudCredential =
+    FocusFlowShared.isCloudMode() &&
+    Boolean(sessionStorage.getItem("focusflow_token"));
 
-  if (account?.passwordHash && account?.salt) {
+  if (hasCloudCredential || (account?.passwordHash && account?.salt)) {
     if (currentField) currentField.hidden = false;
     if (currentInput) currentInput.required = true;
     if (button) button.textContent = "Change Password";
@@ -415,8 +446,11 @@ async function changePassword() {
   const confirmInput = document.getElementById("confirmPassword");
   const button = document.getElementById("changePasswordButton");
   const account = FocusFlowShared.getLocalAccount();
+  const cloudMode = FocusFlowShared.isCloudMode();
 
-  const hasCredential = Boolean(account?.passwordHash && account?.salt);
+  const hasCredential = cloudMode
+    ? Boolean(sessionStorage.getItem("focusflow_token"))
+    : Boolean(account?.passwordHash && account?.salt);
   const currentPassword = currentInput?.value || "";
   const newPassword = newInput?.value || "";
   const confirmation = confirmInput?.value || "";
@@ -467,7 +501,20 @@ async function changePassword() {
         : "Setting Password…";
     }
 
-    if (!hasCredential) {
+    if (cloudMode) {
+      await FocusFlowShared.apiRequest("auth/change-password", {
+        method: "POST",
+        body: {
+          currentPassword,
+          newPassword
+        }
+      });
+
+      setPasswordSecurityMessage(
+        "Password changed successfully. Use the new password next time you log in.",
+        "success"
+      );
+    } else if (!hasCredential) {
       const username =
         settingsData.profile.username ||
         sessionStorage.getItem("focusflow_username") ||
@@ -527,7 +574,9 @@ async function changePassword() {
   } finally {
     if (button) {
       button.disabled = false;
-      button.textContent = FocusFlowShared.getLocalAccount()
+      button.textContent = (
+        FocusFlowShared.isCloudMode() || FocusFlowShared.getLocalAccount()
+      )
         ? "Change Password"
         : "Set Password";
     }

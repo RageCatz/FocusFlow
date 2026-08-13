@@ -151,6 +151,74 @@ window.FocusFlowShared = {
 
 
 /* =====================================================
+   Cloud account API
+   Hosted FocusFlow uses the Render/Neon backend through Vercel's
+   /api/proxy endpoint. Local file development keeps the browser-local
+   account fallback so the project can still be opened without a server.
+===================================================== */
+FocusFlowShared.isCloudMode = function () {
+  return window.location.protocol === "https:";
+};
+
+FocusFlowShared.apiRequest = async function (path, options = {}) {
+  const cleanPath = String(path || "").replace(/^\/+/, "");
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
+
+  const token = sessionStorage.getItem("focusflow_token");
+  if (token && token !== "local-auth") {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`/api/proxy?path=${encodeURIComponent(cleanPath)}`, {
+    method: options.method || "GET",
+    headers,
+    body: options.body === undefined ? undefined : JSON.stringify(options.body)
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const payload = contentType.includes("application/json")
+    ? await response.json()
+    : { error: await response.text() };
+
+  if (!response.ok) {
+    throw new Error(payload?.error || `Request failed (${response.status}).`);
+  }
+
+  return payload;
+};
+
+FocusFlowShared.saveCloudSession = function (payload, fallbackUsername = "") {
+  const displayUsername = payload?.username || fallbackUsername;
+
+  sessionStorage.setItem(
+    "focusflowCurrentUser",
+    JSON.stringify({
+      username: displayUsername,
+      loggedInAt: new Date().toISOString()
+    })
+  );
+  sessionStorage.setItem("focusflow_token", payload?.token || "");
+  sessionStorage.setItem("focusflow_username", displayUsername);
+
+  if (payload?.profile && typeof payload.profile === "object") {
+    const savedData = this.readStorage("focusflowDashboardData", {});
+    this.writeStorage("focusflowDashboardData", {
+      ...savedData,
+      profile: {
+        ...(savedData.profile || {}),
+        ...payload.profile,
+        username: displayUsername
+      }
+    });
+  }
+
+  return displayUsername;
+};
+
+/* =====================================================
    Local account password security
    Passwords are stored as PBKDF2 hashes, never as plain text.
 ===================================================== */

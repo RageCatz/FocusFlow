@@ -81,37 +81,54 @@ loginForm.addEventListener("submit", async (event) => {
   }
 
   try {
-    const account = FocusFlowShared.getLocalAccount();
+    let displayUsername = loginUsername.value;
 
-    if (!account) {
-      setSystemMessage(
-        "No local FocusFlow account exists yet. Create one on the Sign Up page first.",
-        "error"
+    if (FocusFlowShared.isCloudMode()) {
+      const result = await FocusFlowShared.apiRequest("auth/login", {
+        method: "POST",
+        body: {
+          username: loginUsername.value,
+          password: loginPassword.value
+        }
+      });
+
+      displayUsername = FocusFlowShared.saveCloudSession(
+        result,
+        loginUsername.value
       );
-      return;
+    } else {
+      const account = FocusFlowShared.getLocalAccount();
+
+      if (!account) {
+        setSystemMessage(
+          "No local FocusFlow account exists yet. Create one on the Sign Up page first.",
+          "error"
+        );
+        return;
+      }
+
+      const valid = await FocusFlowShared.verifyLocalPassword(
+        loginUsername.value,
+        loginPassword.value
+      );
+
+      if (!valid) {
+        setSystemMessage("Incorrect username or password.", "error");
+        return;
+      }
+
+      displayUsername = account.displayUsername || loginUsername.value;
+
+      sessionStorage.setItem(
+        "focusflowCurrentUser",
+        JSON.stringify({
+          username: displayUsername,
+          loggedInAt: new Date().toISOString()
+        })
+      );
+      sessionStorage.setItem("focusflow_token", "local-auth");
+      sessionStorage.setItem("focusflow_username", displayUsername);
     }
-
-    const valid = await FocusFlowShared.verifyLocalPassword(
-      loginUsername.value,
-      loginPassword.value
-    );
-
-    if (!valid) {
-      setSystemMessage("Incorrect username or password.", "error");
-      return;
-    }
-
-    const displayUsername = account.displayUsername || loginUsername.value;
-
-    sessionStorage.setItem(
-      "focusflowCurrentUser",
-      JSON.stringify({
-        username: displayUsername,
-        loggedInAt: new Date().toISOString()
-      })
-    );
-    sessionStorage.setItem("focusflow_token", "local-auth");
-    sessionStorage.setItem("focusflow_username", displayUsername);
 
     const remember = document.getElementById("rememberLogin")?.checked;
     if (remember) {

@@ -231,16 +231,6 @@ signupForm.addEventListener("submit", async (event) => {
   }
 
   try {
-    const existingAccount = FocusFlowShared.getLocalAccount();
-
-    if (existingAccount) {
-      setSystemMessage(
-        "A local FocusFlow account already exists in this browser. Log in with it, or delete its local data from Settings before creating a different account.",
-        "error"
-      );
-      return;
-    }
-
     const profile = {
       name: nameInput.value,
       username: usernameInput.value,
@@ -255,11 +245,33 @@ signupForm.addEventListener("submit", async (event) => {
         .join("") || "ST"
     };
 
-    await FocusFlowShared.createLocalAccount({
-      username: usernameInput.value,
-      password: passwordInput.value,
-      profile
-    });
+    if (FocusFlowShared.isCloudMode()) {
+      await FocusFlowShared.apiRequest("auth/signup", {
+        method: "POST",
+        body: {
+          username: usernameInput.value,
+          password: passwordInput.value,
+          profile,
+          state: {}
+        }
+      });
+    } else {
+      const existingAccount = FocusFlowShared.getLocalAccount();
+
+      if (existingAccount) {
+        setSystemMessage(
+          "A local FocusFlow account already exists in this browser. Log in with it, or delete its local data from Settings before creating a different account.",
+          "error"
+        );
+        return;
+      }
+
+      await FocusFlowShared.createLocalAccount({
+        username: usernameInput.value,
+        password: passwordInput.value,
+        profile
+      });
+    }
 
     const savedData = FocusFlowShared.readStorage(
       "focusflowDashboardData",
@@ -282,7 +294,9 @@ signupForm.addEventListener("submit", async (event) => {
     });
 
     setSystemMessage(
-      "Account created securely. You can now log in with this username and password.",
+      FocusFlowShared.isCloudMode()
+        ? "Account created. Your login is now saved securely in the FocusFlow database."
+        : "Account created securely. You can now log in with this username and password.",
       "success"
     );
 
