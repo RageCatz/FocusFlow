@@ -84,18 +84,48 @@ loginForm.addEventListener("submit", async (event) => {
     let displayUsername = loginUsername.value;
 
     if (FocusFlowShared.isCloudMode()) {
-      const result = await FocusFlowShared.apiRequest("auth/login", {
-        method: "POST",
-        body: {
-          username: loginUsername.value,
-          password: loginPassword.value
-        }
-      });
+      try {
+        const result = await FocusFlowShared.apiRequest("auth/login", {
+          method: "POST",
+          body: {
+            username: loginUsername.value,
+            password: loginPassword.value
+          }
+        });
 
-      displayUsername = FocusFlowShared.saveCloudSession(
-        result,
-        loginUsername.value
-      );
+        displayUsername = FocusFlowShared.saveCloudSession(
+          result,
+          loginUsername.value
+        );
+      } catch (cloudError) {
+        // Accounts created before cloud authentication was added are stored
+        // securely in this browser. Keep those users able to sign in while
+        // new/database-backed accounts continue to use the cloud API.
+        const localAccount = FocusFlowShared.getLocalAccount();
+        const validLocalAccount = localAccount
+          ? await FocusFlowShared.verifyLocalPassword(
+              loginUsername.value,
+              loginPassword.value
+            )
+          : false;
+
+        if (!validLocalAccount) {
+          throw cloudError;
+        }
+
+        displayUsername =
+          localAccount.displayUsername || loginUsername.value;
+
+        sessionStorage.setItem(
+          "focusflowCurrentUser",
+          JSON.stringify({
+            username: displayUsername,
+            loggedInAt: new Date().toISOString()
+          })
+        );
+        sessionStorage.setItem("focusflow_token", "local-auth");
+        sessionStorage.setItem("focusflow_username", displayUsername);
+      }
     } else {
       const account = FocusFlowShared.getLocalAccount();
 
