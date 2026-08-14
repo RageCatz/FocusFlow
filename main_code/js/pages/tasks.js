@@ -454,6 +454,21 @@ function addTask() {
     return;
   }
 
+  if (name.length > 100) {
+    nameInput.classList.add("input-error");
+    nameInput.setAttribute("aria-invalid", "true");
+    if (nameError) {
+      nameError.textContent = "Task names must be 100 characters or fewer.";
+      nameError.hidden = false;
+    }
+    FocusFlowShared.showToast(
+      "Task names must be 100 characters or fewer.",
+      "error"
+    );
+    nameInput.focus();
+    return;
+  }
+
   if (!parseDate(dueDate)) {
     FocusFlowShared.showToast("Choose a valid due date.", "error");
     dateInput.focus();
@@ -512,6 +527,15 @@ function saveEditedTask(taskId) {
   if (name.length < 2) {
     FocusFlowShared.showToast(
       "Enter a task name with at least 2 characters.",
+      "error"
+    );
+    nameInput.focus();
+    return;
+  }
+
+  if (name.length > 100) {
+    FocusFlowShared.showToast(
+      "Task names must be 100 characters or fewer.",
       "error"
     );
     nameInput.focus();

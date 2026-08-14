@@ -221,7 +221,7 @@ app.get("/api/data", authenticate, async (request, response) => {
     return response.json({ state: result.rows[0]?.state || {} });
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ error: "Could not load data." });
+    return response.status(500).json({ error: "Could not load your saved data. Please refresh and try again." });
   }
 });
 
@@ -239,7 +239,7 @@ app.put("/api/data", authenticate, async (request, response) => {
     return response.json({ ok: true });
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ error: "Could not save data." });
+    return response.status(500).json({ error: "Could not save your changes. Check your connection and try again." });
   }
 });
 

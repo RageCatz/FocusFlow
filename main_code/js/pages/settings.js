@@ -106,9 +106,9 @@ async function saveProfile() {
     return;
   }
 
-  if (!/^[A-Za-z0-9]{3,}$/.test(username)) {
+  if (!/^[A-Za-z0-9]{3,64}$/.test(username)) {
     FocusFlowShared.showToast(
-      "Username must be at least 3 letters or numbers.",
+      "Username must be 3-64 letters or numbers.",
       "error"
     );
     document.getElementById("username")?.focus();
