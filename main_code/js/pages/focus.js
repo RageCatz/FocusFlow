@@ -227,8 +227,50 @@ function renderDailyProgress() {
   document.getElementById("dailyProgressBar").style.width = `${percent}%`;
 }
 
+function validateFocusDuration(value) {
+  const input = document.getElementById("focusDuration");
+  const rawValue = String(value ?? "").trim();
+  const parsed = Number(rawValue);
+
+  if (!rawValue || !Number.isFinite(parsed)) {
+    input?.setAttribute("aria-invalid", "true");
+    FocusFlowShared.showToast(
+      "Please enter a focus duration as a number between 1 and 180 minutes.",
+      "error"
+    );
+    input?.focus();
+    return null;
+  }
+
+  if (!Number.isInteger(parsed)) {
+    input?.setAttribute("aria-invalid", "true");
+    FocusFlowShared.showToast(
+      "Please enter a whole number of minutes between 1 and 180.",
+      "error"
+    );
+    input?.focus();
+    return null;
+  }
+
+  if (parsed < 1 || parsed > 180) {
+    input?.setAttribute("aria-invalid", "true");
+    FocusFlowShared.showToast(
+      "Focus duration must be between 1 and 180 minutes.",
+      "error"
+    );
+    input?.focus();
+    return null;
+  }
+
+  input?.removeAttribute("aria-invalid");
+  return parsed;
+}
+
 function applyDuration(value, announce = true) {
-  durationMinutes = clampDuration(value);
+  const validatedDuration = validateFocusDuration(value);
+  if (validatedDuration === null) return false;
+
+  durationMinutes = validatedDuration;
   totalSeconds = durationMinutes * 60;
   remainingSeconds = totalSeconds;
   completionRecorded = false;
@@ -254,6 +296,8 @@ function applyDuration(value, announce = true) {
   if (announce) {
     FocusFlowShared.showToast(`Focus duration set to ${durationMinutes} minutes.`, "success");
   }
+
+  return true;
 }
 
 function stopTimerInterval() {

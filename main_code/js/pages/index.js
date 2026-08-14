@@ -220,16 +220,11 @@ function wireEvents() {
       applySettings();
       renderDashboard();
     },
-    panelIds: ["notifyPanel", "quickSettings", "profilePanel", "sidebarProfilePanel"],
-    panelControllerOptions: {
-      expandedButtonId: "sidebarUser",
-      expandedPanelId: "sidebarProfilePanel"
-    },
+    panelIds: ["notifyPanel", "quickSettings", "profilePanel"],
     buttonPanelPairs: [
       ["notifyBtn", "notifyPanel"],
       ["quickSettingsBtn", "quickSettings"],
-      ["profileBtn", "profilePanel"],
-      ["sidebarUser", "sidebarProfilePanel"]
+      ["profileBtn", "profilePanel"]
     ]
   });
 
